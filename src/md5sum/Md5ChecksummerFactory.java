@@ -15,9 +15,9 @@
  * Contributors:
  *     Tim Tiemens - initial API and implementation
  ******************************************************************************/
-package com.tiemens.secretshare.md5sum;
+package md5sum;
 
-import com.tiemens.secretshare.exceptions.SecretShareException;
+import exceptions.SecretShareException;
 
 public final class Md5ChecksummerFactory
 {
