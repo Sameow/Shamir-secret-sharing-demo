@@ -28,7 +28,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
-import com.tiemens.secretshare.exceptions.SecretShareException;
+import secretshare.exceptions.SecretShareException;
 import com.tiemens.secretshare.math.BigIntStringChecksum;
 import com.tiemens.secretshare.math.CombinationGenerator;
 import com.tiemens.secretshare.math.EasyLinearEquation;
