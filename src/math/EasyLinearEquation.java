@@ -14,7 +14,7 @@
  * Contributors:
  *     Tim Tiemens - initial API and implementation
  *******************************************************************************/
-package com.tiemens.secretshare.math;
+package math;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.tiemens.secretshare.exceptions.SecretShareException;
+import exceptions.SecretShareException;
 
 /**
  * "Easy" implementation of linear equation solver.

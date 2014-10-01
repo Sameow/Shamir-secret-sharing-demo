@@ -23,12 +23,12 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-import com.tiemens.secretshare.engine.SecretShare;
-import com.tiemens.secretshare.engine.SecretShare.ParanoidOutput;
-import com.tiemens.secretshare.engine.SecretShare.ShareInfo;
-import com.tiemens.secretshare.engine.SecretShare.SplitSecretOutput;
-import com.tiemens.secretshare.exceptions.SecretShareException;
-import com.tiemens.secretshare.math.BigIntUtilities;
+import engine.SecretShare;
+import engine.SecretShare.ParanoidOutput;
+import engine.SecretShare.ShareInfo;
+import engine.SecretShare.SplitSecretOutput;
+import exceptions.SecretShareException;
+import math.BigIntUtilities;
 
 /**
  * Main command line for the "split" (aka "create") of a secret.

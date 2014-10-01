@@ -15,11 +15,11 @@
  * Contributors:
  *     Tim Tiemens - initial API and implementation
  ******************************************************************************/
-package com.tiemens.secretshare.math;
+package math;
 
 import java.math.BigInteger;
 
-import com.tiemens.secretshare.exceptions.SecretShareException;
+import exceptions.SecretShareException;
 
 /**
  * Polynomial equation implementation.

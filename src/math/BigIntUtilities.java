@@ -15,14 +15,14 @@
  * Contributors:
  *     Tim Tiemens - initial API and implementation
  ******************************************************************************/
-package com.tiemens.secretshare.math;
+package math;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Random;
 
-import com.tiemens.secretshare.exceptions.SecretShareException;
+import exceptions.SecretShareException;
 
 public final class BigIntUtilities
 {

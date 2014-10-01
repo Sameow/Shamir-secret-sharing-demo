@@ -15,7 +15,7 @@
  * Contributors:
  *     Tim Tiemens - initial API and implementation
  ******************************************************************************/
-package com.tiemens.secretshare.md5sum;
+package md5sum;
 
 public interface Md5Checksummer
 {

@@ -14,7 +14,7 @@
  * Contributors:
  *     Tim Tiemens - initial API and implementation
  *******************************************************************************/
-package com.tiemens.secretshare.math;
+package math;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.tiemens.secretshare.exceptions.SecretShareException;
+import exceptions.SecretShareException;
 
 public class CombinationGenerator<E>
         implements Iterator<List<E>>,
