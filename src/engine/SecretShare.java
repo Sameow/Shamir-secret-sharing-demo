@@ -28,11 +28,11 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
-import secretshare.exceptions.SecretShareException;
-import com.tiemens.secretshare.math.BigIntStringChecksum;
-import com.tiemens.secretshare.math.CombinationGenerator;
-import com.tiemens.secretshare.math.EasyLinearEquation;
-import com.tiemens.secretshare.math.PolyEquationImpl;
+import exceptions.SecretShareException;
+import math.BigIntStringChecksum;
+import math.CombinationGenerator;
+import math.EasyLinearEquation;
+import math.PolyEquationImpl;
 
 /**
  * Main class for the "Shamir's Secret Sharing" implementation.
