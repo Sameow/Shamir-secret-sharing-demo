@@ -49,16 +49,19 @@ public final class Main
     public static void main(String[] args)
     {
     	//TOGGLE MODE HERE
-    	args[0]="split";
+    	//Usage: split -k <k> -n <n> -sN|-sS secret
+    	//Usage: combine -stdin
+    	//args = new String[7];
+    	String[] arguments={"split", "-k", "3", "-n", "6", "-sS", "Cat"};
     	
-        main(args, System.in, System.out, true);
+        main(arguments, System.in, System.out, true);
     }
 
     public static void main(String[] args,
                             InputStream in,
                             PrintStream out,
                             boolean callExit)
-    {
+    {	 
         if (args.length < 1)
         {
             out.println("Error: must supply at least 1 argument");
