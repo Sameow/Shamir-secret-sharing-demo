@@ -41,8 +41,6 @@ public final class Main
         return BuildVersion.getUiVersion();
     }
 
-
-
     /**
      * @param args from command line
      */
