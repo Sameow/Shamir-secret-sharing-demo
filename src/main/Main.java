@@ -20,7 +20,7 @@ package main;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-import buildVersion.BuildVersion;
+import buildVer.BuildVersion;
 
 /**
  * "Dispatch" main program.
