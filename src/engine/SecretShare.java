@@ -408,8 +408,10 @@ public class SecretShare
 
         for (int x = 1, n = publicInfo.getNforSplit() + 1; x < n; x++)
         {
+        	
             final BigInteger fofx = equation.calculateFofX(BigInteger.valueOf(x));
             BigInteger data = fofx;
+            System.err.println("Data: "+data);
             if (publicInfo.primeModulus != null)
             {
                 data = data.mod(publicInfo.primeModulus);
