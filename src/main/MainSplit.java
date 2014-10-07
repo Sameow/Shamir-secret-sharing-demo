@@ -484,7 +484,6 @@ public final class MainSplit
             if (printAllSharesAtOnce)
             {
                 printParanoidCompleteOutput(out);
-                printHeaderInfo(out);
                 printSharesAllAtOnce(out);
             }
             else
@@ -568,8 +567,6 @@ public final class MainSplit
         private void printHeaderInfo(PrintStream out)
         {
             final SecretShare.PublicInfo publicInfo = splitSecretOutput.getPublicInfo();
-
-            field(out, "Secret Share version " + Main.getVersionString(), "");
             field(out, "Date", publicInfo.getDate());
             field(out, "UUID", publicInfo.getUuid());
             field(out, "Description", publicInfo.getDescription());

@@ -428,7 +428,7 @@ public final class MainCombine
         {
             //final SecretShare.PublicInfo publicInfo = combineOutput.getPublicInfo();
 
-            out.println("Secret Share version " + Main.getVersionString());
+            out.println("Secret Share version ");
             //field(out, "Date", publicInfo.getDate());
             //field(out, "UUID", publicInfo.getUuid());
             //field(out, "Description", publicInfo.getDescription());

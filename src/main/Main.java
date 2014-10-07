@@ -34,14 +34,6 @@ import buildVer.BuildVersion;
 public final class Main
 {
     /**
-     * @return version as a string
-     */
-    public static String getVersionString()
-    {
-        return BuildVersion.getUiVersion();
-    }
-
-    /**
      * @param args from command line
      */
     public static void main(String[] args)
@@ -51,7 +43,7 @@ public final class Main
     	//Usage: combine -stdin
     	//args = new String[7];
     	String[] arguments={"split", "-k", "3", "-n", "6", "-sS", "Cat"};
-    	
+    	//String[] arguments={};
         main(arguments, System.in, System.out, true);
     }
 
