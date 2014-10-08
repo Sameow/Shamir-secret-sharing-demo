@@ -59,6 +59,7 @@ public final class MainSplit
             SplitInput input = SplitInput.parse(args);
             SplitOutput output = input.output();
             output.print(out);
+            
         }
         catch (SecretShareException e)
         {
@@ -256,12 +257,14 @@ public final class MainSplit
                     i++;
                     ret.secretArgument = null;
                     ret.secret = parseBigInteger("sN", args, i);
+                    
                 }
                 else if ("-sS".equals(args[i]))
                 {
                     i++;
                     ret.secretArgument = args[i];
                     ret.secret = BigIntUtilities.Human.createBigInteger(args[i]);
+                    
                 }
                 else if ("-r".equals(args[i]))
                 {
@@ -350,8 +353,10 @@ public final class MainSplit
 
             if (calculateModulus)
             {
+            	
                 if (calculateModulusAuto)
                 {
+                	
                     ret.modulus = SecretShare.createAppropriateModulusForSecret(ret.secret);
                 }
                 else
@@ -359,11 +364,13 @@ public final class MainSplit
                     ret.modulus = SecretShare.createRandomModulusForSecret(ret.secret);
                 }
             }
-
+            
             if (ret.modulus != null)
             {
+            	
                 if (! SecretShare.isTheModulusAppropriateForSecret(ret.modulus, ret.secret))
                 {
+                	
                     final String originalString;
                     if (ret.secretArgument != null)
                     {
@@ -415,7 +422,7 @@ public final class MainSplit
         {
             SplitOutput ret = new SplitOutput(this);
             ret.setPrintAllSharesAtOnce(printAllSharesAtOnce);
-
+         
             SecretShare.PublicInfo publicInfo =
                 new SecretShare.PublicInfo(this.n,
                                            this.k,
