@@ -433,7 +433,7 @@ public class SecretShare
     public CombineOutput combine(final List<ShareInfo> usetheseshares)
     {
         CombineOutput ret = null;
-  
+
         sanityCheckPublicInfos(publicInfo, usetheseshares);
 
         if (publicInfo.getK() > usetheseshares.size())
