@@ -36,7 +36,6 @@ public final class Main
     /**
      * @param args from command line
      */
-	//Samuel
     public static void main(String[] args)
     {
     	//TOGGLE MODE HERE
