@@ -205,8 +205,10 @@ public final class MainSplit
 
         // optional:  if null, then do not use modulus
         // default to 384-bit
-        private BigInteger modulus = SecretShare.getPrimeUsedFor384bitSecretPayload();
-
+        
+        private BigInteger modulus;
+        //private BigInteger modulus = SecretShare.getPrimeUsedFor384bitSecretPayload();
+        
         // optional:
         //    paranoid: null = do nothing, paranoid < 0 = do all, otherwise paranoid = # of tests
         private Integer paranoid;
@@ -284,6 +286,10 @@ public final class MainSplit
                 {
                     ret.modulus = SecretShare.getPrimeUsedFor192bitSecretPayload();
                 }
+                else if("-primeCustom".equals(args[i])){
+                	ret.modulus = SecretShare.createModulus(ret.secret);
+                	System.out.println("Prime: "+ ret.modulus);
+                }
                 else if ("-primeAuto".equals(args[i]))
                 {
                     calculateModulus = true;
@@ -308,6 +314,7 @@ public final class MainSplit
                     if (BigIntUtilities.Checksum.couldCreateFromStringMd5CheckSum(thearg))
                     {
                         ret.modulus = BigIntUtilities.Checksum.createBiscs(thearg).asBigInteger();
+                        System.out.println("BigInt value: "+BigIntUtilities.Checksum.createBiscs(thearg).asBigInteger());
                     }
                     else
                     {

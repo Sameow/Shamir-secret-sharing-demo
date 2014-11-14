@@ -110,6 +110,23 @@ public class SecretShare
         }
         return ret;
     }
+    
+    public static BigInteger createModulus(BigInteger secret){
+    	Random random = new SecureRandom();
+    	//final int certainty = 100;
+    	int modLength = secret.bitLength() + 5;
+    	BigInteger mod = null;
+    	
+    	//generates a mod as long as mod is null or secret is bigger than mod
+    	while(mod == null || secret.compareTo(mod) >= 0){
+    		
+    		//mod = new BigInteger(modLength, certainty, random);
+    		mod = BigInteger.probablePrime(modLength,random);
+    	
+    	}
+    	
+    	return mod;
+    }
 
     /**
      * NOTE: you should prefer createAppropriateModulusForSecret() over this method.
@@ -623,17 +640,21 @@ public class SecretShare
     {
         for (int i = 1, n = coeffs.length; i < n; i++)
         {
+        	int coeffLen = secret.bitLength();
             BigInteger big = null;
             //big = BigInteger.valueOf((random.nextInt() % 20) + 1);
 
-            big = BigInteger.valueOf(random.nextLong());
-            // ENHANCEMENT: provide better control?  make it even bigger?
-            // for now, we'll just do long^2:
-            big = big.multiply(BigInteger.valueOf(random.nextLong()));
+//            big = BigInteger.valueOf(random.nextLong());
+//            // ENHANCEMENT: provide better control?  make it even bigger?
+//            // for now, we'll just do long^2:
+//            big = big.multiply(BigInteger.valueOf(random.nextLong()));
+            
+            big = BigInteger.probablePrime(coeffLen,random);
 
             // FIX? TODO:? FIX?
-            big = big.abs(); // make it positive
-
+            big = big.abs(); // to get the positive(absolute) value
+            
+            
             coeffs[i] = big;
 
             // Book says "all coefficients are smaller than the modulus"
