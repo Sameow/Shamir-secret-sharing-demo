@@ -59,10 +59,12 @@ public final class BigIntUtilities
             BigInteger ret = null;
             try
             {
+            	//TODO: print
             	System.out.println("input: " +in);
                 byte[] b = in.getBytes(UTF8);
                 ret = new BigInteger(b);
                 BigInteger a = new BigInteger(in.getBytes());
+                //TODO: print
                 System.out.println("BigInt Secret: "+ret);
                 return ret;
             }

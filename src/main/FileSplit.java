@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import engine.ReadFileIntoByteArray;
 
 public class FileSplit {
 
@@ -22,39 +27,40 @@ public class FileSplit {
 	};
 	
 	public static void main(String args[]){
-		ShamirShare shares = new ShamirShare();
-    	String threshold = "3";
-    	String noOfShares = "6";
-    	String secret = "hello";
-    	
-		String[] arguments ={"-k", threshold, "-n", noOfShares, "-sS", secret , "-primeCustom"};
-		MainSplit.main(arguments);
+		ArrayList<ShamirShare> share = new ArrayList<ShamirShare>();
+		File file = new File("C:/Users/L335a10/Desktop/Hello.txt");
+		share = split(file);
+		for(int i =0; i<share.size(); i++){
+			System.out.println(share.get(i).getShareIndex()+","+share.get(i).getShare());
+		}
+		//for testing output
+//		share = split();
+//		for(int i =0; i<share.size(); i++){
+//			System.out.println(share.get(i).getShareIndex()+","+share.get(i).getShare());
+//		}
 		
-
 	}
 	
-	String getByteArray(){
-		byte[] data = null;
-		String byteString = null;
-		File file = this.getFile();
+	public static ArrayList<ShamirShare> split(File file){
+		ShamirShare shares = new ShamirShare();
+		ArrayList<ShamirShare> share = new ArrayList<ShamirShare>();
+		byte[] secretByte = null;
 		
-        try {
-              FileInputStream fileInputStream = new FileInputStream(file);
-              fileInputStream.read(data);
-              for (int i = 0; i < data.length; i++) {
-                          System.out.print((char)data[i]);
-               }
-         } catch (FileNotFoundException e) {
-                     System.out.println("File Not Found.");
-                     e.printStackTrace();
-         }
-         catch (IOException e1) {
-                  System.out.println("Error Reading The File.");
-                   e1.printStackTrace();
-         }
+		try {
+			secretByte = ReadFileIntoByteArray.getBytesFromFile(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
+		String secret = secretByte.toString();
+    	String threshold = "3";
+    	String noOfShares = "6";
+    	
+		String[] arguments ={"-k", threshold, "-n", noOfShares, "-sS", secret , "-primeCustom"};
 		
+		share = MainSplit.split(arguments);
 		
-		return byteString;
+		return share;
+
 	}
 }

@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -47,26 +48,33 @@ public final class MainSplit
      */
     public static void main(String[] args)
     {
-        main(args, System.in, System.out);
+        //main(args, System.in, System.out);
     }
 
-    public static void main(String[] args,
-                            InputStream in,
-                            PrintStream out)
+    public static ArrayList<ShamirShare> split(String[] args)
     {
+    	ShamirShare ssShare = new ShamirShare();
+    	ArrayList<ShamirShare> shareArrList = new ArrayList<ShamirShare>();
         try
         {
             SplitInput input = SplitInput.parse(args);
             SplitOutput output = input.output();
-            output.print(out);
+            List<ShareInfo> shareList = output.retrieveShares();
+            
+            for(int i = 0; i<shareList.size(); i++){
+            	ShamirShare share = new ShamirShare(i, shareList.get(i).getShare());
+            	shareArrList.add(share);
+            }
+           
             
         }
         catch (SecretShareException e)
         {
-            out.println(e.getMessage());
-            usage(out);
-            optionallyPrintStackTrace(args, e, out);
+            System.out.println(e.getMessage());
+//            usage(out);
+//            optionallyPrintStackTrace(args, e, out);
         }
+        return shareArrList;
     }
 
     public static void usage(PrintStream out)
@@ -409,6 +417,12 @@ public final class MainSplit
             {
                 printSharesOnePerPage(out);
             }
+        }
+        
+        public List<ShareInfo> retrieveShares(){
+        	List<ShareInfo> shares = splitSecretOutput.getShareInfos();
+        	
+        	return shares;
         }
 
         // ==================================================
