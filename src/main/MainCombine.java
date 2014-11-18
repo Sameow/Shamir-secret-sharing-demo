@@ -75,15 +75,10 @@ public final class MainCombine
     {
         out.println("Usage:");
         out.println(" combine -k <k>  -s<n> <secret-N> ..." +               // required
-                    "  [-prime4096|-prime384|-prime192|-primeN <m>|-primeNone] -stdin"); // optional
+                    "  [-primeCustom] -stdin"); // optional
         out.println("  -k <k>        the threshold");
         out.println("  -s<n> <s>     secret#n as a number e.g. '124332' or 'bigintcs:123456-DC0AE1'");
         out.println("     ...           repeat this argument <k> times");
-        out.println("  -prime4096    for modulus, use built-in 4096-bit prime");
-        out.println("  -prime384     for modulus, use built-in 384-bit prime [default]");
-        out.println("  -prime192     for modulus, use built-in 192-bit prime");
-        out.println("  -primeN <m>   for modulus use m, e.g. '59561' or 'bigintcs:12345-DC0AE1'");
-        out.println("  -primeNone    modulus, do NOT use any modulus");
         out.println("  -stdin        read values from standard input, as written by 'split'");
     }
 
@@ -119,9 +114,7 @@ public final class MainCombine
 
         private final List<SecretShare.ShareInfo> shares = new ArrayList<SecretShare.ShareInfo>();
 
-        // optional:  if null, then do not use modulus
-        // default to 384-bit
-        private BigInteger modulus = SecretShare.getPrimeUsedFor384bitSecretPayload();
+        private BigInteger modulus = null;
 
         // optional: for combine, we don't need n, but you can provide it
         private Integer n           = null;
@@ -169,18 +162,6 @@ public final class MainCombine
                 {
                     i++;
                     ret.modulus = parseBigInteger("m", args, i);
-                }
-                else if ("-prime4096".equals(args[i]))
-                {
-                    ret.modulus = SecretShare.getPrimeUsedFor4096bigSecretPayload();
-                }
-                else if ("-prime384".equals(args[i]))
-                {
-                    ret.modulus = SecretShare.getPrimeUsedFor384bitSecretPayload();
-                }
-                else if ("-prime192".equals(args[i]))
-                {
-                    ret.modulus = SecretShare.getPrimeUsedFor192bitSecretPayload();
                 }
                 else if ("-primeN".equals(args[i]))
                 {
