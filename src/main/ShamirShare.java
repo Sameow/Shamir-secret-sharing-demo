@@ -57,19 +57,20 @@ public class ShamirShare {
 	}
 	
 	public ShamirShare() {};
-	public ShamirShare(int threshold, int noOfShares, BigInteger prime, ArrayList<ShamirShare> s){
-		this.threshold = threshold;
-		this.noOfShares = noOfShares;
-		this.prime = prime;
+	
+	public ShamirShare(ArrayList<ShamirShare> s){
 		this.shareArr = s;
 	};
 	
-	public ShamirShare(int shareIndex, BigInteger share){
+	public ShamirShare(int threshold, int noOfShares, BigInteger prime, int shareIndex, BigInteger share){
+		this.threshold = threshold;
+		this.noOfShares = noOfShares;
+		this.prime = prime;
 		this.shareIndex = shareIndex;
 		this.share = share;
 	};
 	
-	public void split(File file){
+	public ShamirShare split(File file){
 		ShamirShare ss = new ShamirShare();
 		ArrayList<ShamirShare> shareList = new ArrayList<ShamirShare>();
 		byte[] secretByte = null;
@@ -93,8 +94,9 @@ public class ShamirShare {
 		String[] arguments ={"-k", strThreshold, "-n", strNoOfShares, "-sS", secret , "-primeCustom"};
 		
 		shareList = MainSplit.split(arguments);
-		ss.setPrime(ss.getPrime());
 		ss.setShareArr(shareList);
+		
+		return ss;
 	}
 	
 	public void combine(){

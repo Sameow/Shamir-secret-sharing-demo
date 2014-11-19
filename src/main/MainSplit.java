@@ -51,20 +51,20 @@ public final class MainSplit
 
     public static ArrayList<ShamirShare> split(String[] args)
     {
-    	ShamirShare ssShare = new ShamirShare();
     	ArrayList<ShamirShare> shareArrList = new ArrayList<ShamirShare>();
         try
         {
             SplitInput input = SplitInput.parse(args);
             SplitOutput output = input.output();
+            BigInteger prime = output.getPrime();
+            int threshold = output.getThreshold();
+            int noOfShares = output.getNoOfShares();
+            
             List<ShareInfo> shareList = output.retrieveShares();
-            output.getInfo();
             for(int i = 0; i<shareList.size(); i++){
-            	ShamirShare share = new ShamirShare(shareList.get(i).getIndex(), shareList.get(i).getShare());
+            	ShamirShare share = new ShamirShare(threshold, noOfShares, prime,shareList.get(i).getIndex(), shareList.get(i).getShare());
             	shareArrList.add(share);
             }
-           
-            
         }
         catch (SecretShareException e)
         {
@@ -422,17 +422,20 @@ public final class MainSplit
         	
         	return shares;
         }
-        public void getInfo(){
+        public BigInteger getPrime(){
         	BigInteger prime = null;
-        	int threshold, noOfShares = 0;
         	prime = splitSecretOutput.getPublicInfo().getPrimeModulus();
+        	return prime;
+        }
+        public int getThreshold(){
+        	int threshold = 0;
         	threshold = splitSecretOutput.getPublicInfo().getK();
+        	return threshold;
+        }
+        public int getNoOfShares(){
+        	int noOfShares = 0;
         	noOfShares = splitSecretOutput.getPublicInfo().getN();
-        	
-        	ShamirShare s = new ShamirShare();
-        	s.setPrime(prime);
-        	s.setThreshold(threshold);
-        	s.setNoOfShares(noOfShares);
+        	return noOfShares;
         }
 
         // ==================================================
@@ -577,10 +580,6 @@ public final class MainSplit
                                 boolean printAsBigIntCs)
         {
             markedValue(out, "Share (x:" + share.getIndex() + ")", share.getShare(), printAsBigIntCs);
-        }
-        
-        private void createFile(){
-        	//create a file
         }
     } // class SplitOutput
 
