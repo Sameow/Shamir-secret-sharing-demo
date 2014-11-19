@@ -31,8 +31,7 @@ public class ClientThread extends Thread{
 	    }
 	    
 	    public void run() {
-	        try (
-	        		
+	        try (	
 	            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
 	            BufferedReader input = new BufferedReader(
 	                new InputStreamReader(
