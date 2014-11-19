@@ -16,7 +16,6 @@
  *******************************************************************************/
 package main;
 
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Random;
 
 import engine.SecretShare;
-import engine.SecretShare.ParanoidOutput;
 import engine.SecretShare.ShareInfo;
 import engine.SecretShare.SplitSecretOutput;
 import exceptions.SecretShareException;
@@ -60,9 +58,9 @@ public final class MainSplit
             SplitInput input = SplitInput.parse(args);
             SplitOutput output = input.output();
             List<ShareInfo> shareList = output.retrieveShares();
-            
+            output.getInfo();
             for(int i = 0; i<shareList.size(); i++){
-            	ShamirShare share = new ShamirShare(i, shareList.get(i).getShare());
+            	ShamirShare share = new ShamirShare(shareList.get(i).getIndex(), shareList.get(i).getShare());
             	shareArrList.add(share);
             }
            
@@ -423,6 +421,18 @@ public final class MainSplit
         	List<ShareInfo> shares = splitSecretOutput.getShareInfos();
         	
         	return shares;
+        }
+        public void getInfo(){
+        	BigInteger prime = null;
+        	int threshold, noOfShares = 0;
+        	prime = splitSecretOutput.getPublicInfo().getPrimeModulus();
+        	threshold = splitSecretOutput.getPublicInfo().getK();
+        	noOfShares = splitSecretOutput.getPublicInfo().getN();
+        	
+        	ShamirShare s = new ShamirShare();
+        	s.setPrime(prime);
+        	s.setThreshold(threshold);
+        	s.setNoOfShares(noOfShares);
         }
 
         // ==================================================

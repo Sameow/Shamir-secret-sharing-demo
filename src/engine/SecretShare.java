@@ -516,8 +516,9 @@ public class SecretShare
                 }
             }
         }
+        
 
-        @Override
+		@Override
         public String toString()
         {
             return "PublicInfo[k=" + k + ", n=" + n + "\n" +
