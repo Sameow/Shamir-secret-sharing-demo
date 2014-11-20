@@ -12,6 +12,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import main.ShamirShare;
+
 public class ServerThread extends Thread{
 	private PrintWriter output;
 	private BufferedReader input;
@@ -71,16 +73,31 @@ public class ServerThread extends Thread{
 	    bos.close();
 	    fos.close();
 	  
-	    Shamir shamir = new fileSplit(receivedFile, split);
-	   //sendSharesToOthers(shamir);
+	    ShamirShare shamir = new ShamirShare();
+	    shamir.split(receivedFile);
+	    localFileSlice(shamir);
+	    sendSharesToOthers(shamir);
 	    output.println("File splitting done.");
+	}
+	
+	private void localFileSlice(ShamirShare shamir) {
+		String fileName=null;
+		File receivedFile = new File(fileName);
+		FileOutputStream fos = new FileOutputStream(receivedFile,true);
+		BufferedOutputStream bos = new BufferedOutputStream(fos);
+		byte[] mybytearray = new byte[fileSize];
+        bos.write(mybytearray);
+	    fos.flush();
+	    bos.close();
+	    fos.close();
+		
 	}
 	
 	private void combineFile(){
 			
 		}
 	
-	private void sendSharesToOthers(Shamir shamir) throws IOException {
+	private void sendSharesToOthers(ShamirShare shamir) throws IOException {
 		try {
 			otherServerIP = getOtherServerIP();
 		} catch (UnknownHostException e) {
