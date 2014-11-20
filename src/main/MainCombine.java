@@ -50,25 +50,25 @@ public final class MainCombine
      */
     public static void main(String[] args)
     {
-        main(args, System.in, System.out);
+//        main(args, System.in, System.out);
     }
 
-    public static void main(String[] args,
-                            InputStream in,
-                            PrintStream out)
+    public static BigInteger combine(String[] args)
     {
+    	BigInteger fileBigInt = null;
         try
         {
-            CombineInput input = CombineInput.parse(args, in, out);
+            CombineInput input = CombineInput.parse(args);
             CombineOutput output = input.output();
-            output.print(out);
+            fileBigInt = output.retrieveSecret();
         }
         catch (SecretShareException e)
         {
-            out.println(e.getMessage());
-            usage(out);
-            MainSplit.optionallyPrintStackTrace(args, e, out);
+            System.out.println(e.getMessage());
+//            usage(out);
+//            MainSplit.optionallyPrintStackTrace(args, e, out);
         }
+        return fileBigInt;
     }
 
     public static void usage(PrintStream out)
@@ -127,9 +127,7 @@ public final class MainCombine
         // ==================================================
         // constructors
         // ==================================================
-        public static CombineInput parse(String[] args,
-                                         InputStream in,
-                                         PrintStream out)
+        public static CombineInput parse(String[] args)
         {
             CombineInput ret = new CombineInput();
 
@@ -153,10 +151,6 @@ public final class MainCombine
                 {
                     i++;
                     ret.n = parseInt("n", args, i);
-                }
-                else if ("-stdin".equals(args[i]))
-                {
-                    ret.processStdin(in, out);
                 }
                 else if ("-m".equals(args[i]))
                 {
@@ -204,62 +198,9 @@ public final class MainCombine
             return ret;
         }
 
-        private void processStdin(InputStream in,
-                                  PrintStream out)
-        {
-            try
-            {
-                processStdinThrow(in, out);
-            }
-            catch (IOException e)
-            {
-                throw new SecretShareException("IOException reading stdin", e);
-            }
-        }
+        
 
         // examples of the kinds of lines we look for:
-
-        //  n = 6
-        //  k = 3
-        //  modulus = 830856716641269307206384693584652377753448639527
-        //  modulus = bigintcs:000002-dba253-6f54b0-ec6c27-3198DB
-        //  Share (x:1) = 481883688219928417596627230876804843822861100800
-        //  Share (x:2) = 481883688232565050752267350226995441999530323860
-        //  Share (x:1) = bigintcs:005468-697323-cc48a7-8f1f87-996040-4d07d2-3da700-9C4722
-        //  Share (x:2) = bigintcs:005468-69732d-4e02c5-7b11d2-9d4426-e26c88-8a6f94-9809A9
-        private void processStdinThrow(InputStream in,
-                                       PrintStream out)
-            throws IOException
-        {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line;
-            while ((line = br.readLine()) != null)
-            {
-                if (line.startsWith("n ="))
-                {
-                    this.n = parseEqualInt("n", line);
-                }
-                else if (line.startsWith("k ="))
-                {
-                    this.k = parseEqualInt("k", line);
-                }
-                else if (line.startsWith("modulus ="))
-                {
-                    this.modulus = parseEqualBigInt("modulus", line);
-
-                }
-                else if (line.startsWith("Share ("))
-                {
-                    SecretShare.ShareInfo share = parseEqualShare("share", line);
-                    addIfNotDuplicate(share);
-                }
-                else
-                {
-                    // There are lots of lines we do not process.
-                    // For now, just ignore them.
-                }
-            }
-        }
 
         private void addIfNotDuplicate(ShareInfo add)
         {
@@ -355,13 +296,6 @@ public final class MainCombine
             return line.substring(line.indexOf(lookfor) + 1).trim();
         }
 
-        private Integer parseEqualInt(String fieldname,
-                                      String line)
-        {
-            String s = after(line, "=");
-            return Integer.valueOf(s);
-        }
-
         private static void checkRequired(String argname,
                                           Object obj)
         {
@@ -418,6 +352,10 @@ public final class MainCombine
             String s = BigIntUtilities.Human.createHumanString(secret);
             out.println("secret.string = '" + s + "'");
 
+        }
+        
+        public BigInteger retrieveSecret(){
+        	return secret;
         }
 
         // ==================================================

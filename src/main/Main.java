@@ -46,7 +46,8 @@ public class Main
 //    	};
     	String[] arguments={"combine", "-k", "3", "-primeN", "3323545194605901592450611133",
     	"-s2", 
-    	"638835792757060468671256144",
+    	"6388357927570604686"
+    	+ "71256144",
     	"-s3", 
     	"1169514202503152160235861170",
     	"-s4", 
@@ -85,7 +86,7 @@ public class Main
             }
             else if ("combine".equalsIgnoreCase(cmd))
             {
-                MainCombine.main(args, in, out);
+                MainCombine.main(args);
             }
             else
             {

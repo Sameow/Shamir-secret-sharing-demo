@@ -49,20 +49,17 @@ public final class MainSplit
         //main(args, System.in, System.out);
     }
 
-    public static ArrayList<ShamirShare> split(String[] args)
+    public static ArrayList<Share> split(String[] args)
     {
-    	ArrayList<ShamirShare> shareArrList = new ArrayList<ShamirShare>();
+    	ArrayList<Share> shareArrList = new ArrayList<Share>();
         try
         {
             SplitInput input = SplitInput.parse(args);
             SplitOutput output = input.output();
-            BigInteger prime = output.getPrime();
-            int threshold = output.getThreshold();
-            int noOfShares = output.getNoOfShares();
             
             List<ShareInfo> shareList = output.retrieveShares();
             for(int i = 0; i<shareList.size(); i++){
-            	ShamirShare share = new ShamirShare(threshold, noOfShares, prime,shareList.get(i).getIndex(), shareList.get(i).getShare());
+            	Share share = new Share(shareList.get(i).getIndex(), shareList.get(i).getShare());
             	shareArrList.add(share);
             }
         }

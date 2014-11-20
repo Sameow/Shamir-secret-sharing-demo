@@ -12,31 +12,18 @@ import engine.ReadFileIntoByteArray;
 
 public class ShamirShare {
 
-	private BigInteger share = null;
-	private int shareIndex = 0;
 	private BigInteger prime = null;
 	private int threshold = 0;
 	private int noOfShares = 0;
-	private ArrayList<ShamirShare> shareArr = new ArrayList<ShamirShare>();
+	private ArrayList<Share> shareArr = new ArrayList<Share>();
 	
-	public ArrayList<ShamirShare> getShareArr() {
+	public ArrayList<Share> getShareArr() {
 		return shareArr;
 	}
-	public void setShareArr(ArrayList<ShamirShare> shareArr) {
+	public void setShareArr(ArrayList<Share> shareArr) {
 		this.shareArr = shareArr;
 	}
-	public BigInteger getShare() {
-	return share;
-	}
-	public void setShare(BigInteger share) {
-		this.share = share;
-	}
-	public int getShareIndex() {
-		return shareIndex;
-	}
-	public void setShareIndex(int shareIndex) {
-		this.shareIndex = shareIndex;
-	}
+
 	public BigInteger getPrime() {
 		return prime;
 	}
@@ -58,21 +45,18 @@ public class ShamirShare {
 	
 	public ShamirShare() {};
 	
-	public ShamirShare(ArrayList<ShamirShare> s){
-		this.shareArr = s;
-	};
+//	public ShamirShare(ArrayList<Share> s){
+//		this.shareArr = s;
+//	};
+//	
+//	public ShamirShare(int threshold, int noOfShares, BigInteger prime){
+//		this.threshold = threshold;
+//		this.noOfShares = noOfShares;
+//		this.prime = prime;
+//	};
 	
-	public ShamirShare(int threshold, int noOfShares, BigInteger prime, int shareIndex, BigInteger share){
-		this.threshold = threshold;
-		this.noOfShares = noOfShares;
-		this.prime = prime;
-		this.shareIndex = shareIndex;
-		this.share = share;
-	};
-	
-	public ShamirShare split(File file){
-		ShamirShare ss = new ShamirShare();
-		ArrayList<ShamirShare> shareList = new ArrayList<ShamirShare>();
+	public void split(File file){
+		ArrayList<Share> shareList = new ArrayList<Share>();
 		byte[] secretByte = null;
 		
 		try {
@@ -84,22 +68,42 @@ public class ShamirShare {
 		String secret = secretByte.toString();
     	int threshold = 3;
     	int noOfShares = 6;
-    	ss.setThreshold(threshold);
-    	ss.setNoOfShares(noOfShares);
+    	this.setThreshold(threshold);
+    	this.setNoOfShares(noOfShares);
     	
     	String strThreshold = Integer.toString(threshold);
     	String strNoOfShares = Integer.toString(noOfShares);
 
-
 		String[] arguments ={"-k", strThreshold, "-n", strNoOfShares, "-sS", secret , "-primeCustom"};
 		
 		shareList = MainSplit.split(arguments);
-		ss.setShareArr(shareList);
-		
-		return ss;
+		this.setShareArr(shareList);
+
 	}
 	
-	public void combine(){
+	public File combine(){
+		//ShamirShare share = share.getShareArr();
+		File combinedFile = null;
+		BigInteger fileByteBigInt = null;
+		byte[] fileByte = null;
+    	String threshold = "3";
+    	String noOfShares = "6";
+    	String prime = "2545358851974595661189810777";
+    	
+		String[] arguments ={"-k", threshold, "-n", noOfShares,"-primeN",prime,
+				"-s1","242795834786098480354491126",
+				"-s2","441956801228623581432992908",
+				"-s3","707808009237847326782800116"};
+		fileByteBigInt = MainCombine.combine(arguments);
+		fileByte = fileByteBigInt.toByteArray();
+		try {
+			combinedFile = ReadFileIntoByteArray.byteArrayToFile(fileByte);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		
+		return combinedFile; 
 	}
 }

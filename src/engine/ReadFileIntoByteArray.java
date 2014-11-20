@@ -28,6 +28,7 @@ package engine;
 */
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -125,6 +126,21 @@ public class ReadFileIntoByteArray {
 
  }
 
+	/**
+	 * Method to convert byte array to file
+	 * 
+	 * @param bytearray
+	 * @return
+	 * @throws IOException
+	 */
+	public static File byteArrayToFile(byte[] bytearray) throws IOException {
+		File file = new File("test.txt");
+		file.createNewFile();
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.write(bytearray);
+		fos.close();
+		return file;
+	}
 
  /**
   * Sole entry point to the class and application.

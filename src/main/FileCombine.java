@@ -18,7 +18,6 @@ public class FileCombine {
 	public static File combine(ArrayList<ShamirShare> share, String prime){
 		File combinedFile = null;
 		ShamirShare ssShare = new ShamirShare();
-		
 		return combinedFile;
 	}
 }
