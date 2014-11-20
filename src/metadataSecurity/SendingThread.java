@@ -7,13 +7,15 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import main.ShamirShare;
+
 public class SendingThread extends Thread {
 	private PrintWriter output;
 	private BufferedReader input;
 	private Socket socket;
-	private Shamir shamir;
+	private ShamirShare shamir;
 	
-	public SendingThread(Socket socket, Shamir shamir) {
+	public SendingThread(Socket socket, ShamirShare shamir) {
 		this.socket=socket;
 		this.shamir=shamir;
 		try {
@@ -34,11 +36,16 @@ public class SendingThread extends Thread {
     		output.println("Sending shares.");
 			//	output.println(shares n relevant info);
     		String inputLine;
-    		while ((inputLine = input.readLine()) != null) {
-			 	if (inputLine.equals("Acknowledged.")){
-			 		break;
-			 	}
-			 	
-			 	}
+    		try {
+				while ((inputLine = input.readLine()) != null) {
+				 	if (inputLine.equals("Acknowledged.")){
+				 		break;
+				 	}
+				 	
+				 	}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 }

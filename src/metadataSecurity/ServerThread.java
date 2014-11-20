@@ -2,8 +2,10 @@ package metadataSecurity;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -80,17 +82,26 @@ public class ServerThread extends Thread{
 	    output.println("File splitting done.");
 	}
 	
-	private void localFileSlice(ShamirShare shamir) {
-		String fileName=null;
-		File receivedFile = new File(fileName);
-		FileOutputStream fos = new FileOutputStream(receivedFile,true);
-		BufferedOutputStream bos = new BufferedOutputStream(fos);
-		byte[] mybytearray = new byte[fileSize];
-        bos.write(mybytearray);
-	    fos.flush();
-	    bos.close();
-	    fos.close();
+	private void localFileSlice(ShamirShare shamir) throws IOException {
+		ArrayList temp = new ArrayList();
+		temp.add(shamir.getNoOfShares());
+		shamir.getPrime();
+		shamir.getThreshold();
+		shamir.getShareArr().get(0).getShare();
+		shamir.getShareArr().get(0).getShareIndex();
 		
+		String content = "This is the content to write into file";
+		 
+		File file = new File("FileShare.txt");
+		FileWriter fw = new FileWriter(file.getAbsoluteFile());
+		BufferedWriter bw = new BufferedWriter(fw);
+		
+		bw.write(content);
+		bw.newLine();
+		
+		
+		bw.close();
+        
 	}
 	
 	private void combineFile(){
