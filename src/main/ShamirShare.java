@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 
+import main.MainSplit.SplitOutput;
 import engine.ReadFileIntoByteArray;
+import engine.SecretShare.ShareInfo;
 
 
 /**Shamir Secret Sharing Share Object**/
@@ -13,8 +16,8 @@ import engine.ReadFileIntoByteArray;
 public class ShamirShare {
 
 	private BigInteger prime = null;
-	private int threshold = 0;
-	private int noOfShares = 0;
+	private int threshold = 2;
+	private int noOfShares = 3;
 	private ArrayList<Share> shareArr = new ArrayList<Share>();
 	
 	public ArrayList<Share> getShareArr() {
@@ -66,18 +69,20 @@ public class ShamirShare {
 		}
 		
 		String secret = secretByte.toString();
-    	int threshold = 3;
-    	int noOfShares = 6;
-    	this.setThreshold(threshold);
-    	this.setNoOfShares(noOfShares);
     	
     	String strThreshold = Integer.toString(threshold);
     	String strNoOfShares = Integer.toString(noOfShares);
 
 		String[] arguments ={"-k", strThreshold, "-n", strNoOfShares, "-sS", secret , "-primeCustom"};
 		
-		shareList = MainSplit.split(arguments);
+		SplitOutput output = MainSplit.split(arguments);
+        List<ShareInfo> tempList = output.retrieveShares();
+        for(int i = 0; i<tempList.size(); i++){
+        	Share share = new Share(tempList.get(i).getIndex(), tempList.get(i).getShare());
+        	shareList.add(share);
+        }
 		this.setShareArr(shareList);
+		this.setPrime(output.getPrime());
 
 	}
 	

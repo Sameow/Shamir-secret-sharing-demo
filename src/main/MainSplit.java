@@ -49,19 +49,14 @@ public final class MainSplit
         //main(args, System.in, System.out);
     }
 
-    public static ArrayList<Share> split(String[] args)
+    public static SplitOutput split(String[] args)
     {
-    	ArrayList<Share> shareArrList = new ArrayList<Share>();
+    	 SplitOutput output = null;
         try
         {
             SplitInput input = SplitInput.parse(args);
-            SplitOutput output = input.output();
+            output = input.output();
             
-            List<ShareInfo> shareList = output.retrieveShares();
-            for(int i = 0; i<shareList.size(); i++){
-            	Share share = new Share(shareList.get(i).getIndex(), shareList.get(i).getShare());
-            	shareArrList.add(share);
-            }
         }
         catch (SecretShareException e)
         {
@@ -69,7 +64,7 @@ public final class MainSplit
 //            usage(out);
 //            optionallyPrintStackTrace(args, e, out);
         }
-        return shareArrList;
+        return output;
     }
 
     public static void usage(PrintStream out)
