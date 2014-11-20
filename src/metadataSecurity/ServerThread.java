@@ -83,23 +83,21 @@ public class ServerThread extends Thread{
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
-		ArrayList temp = new ArrayList();
-		temp.add(shamir.getNoOfShares());
-		shamir.getPrime();
-		shamir.getThreshold();
-		shamir.getShareArr().get(0).getShare();
-		shamir.getShareArr().get(0).getShareIndex();
-		
-		String content = "This is the content to write into file";
-		 
 		File file = new File("FileShare.txt");
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		
-		bw.write(content);
+		bw.write(shamir.getNoOfShares());
 		bw.newLine();
-		
-		
+		bw.write(shamir.getPrime().toString());
+		bw.newLine();
+		bw.write(shamir.getThreshold());
+		bw.newLine();
+		bw.write(shamir.getShareArr().get(0).getShare().toString());
+		bw.newLine();
+		bw.write(shamir.getShareArr().get(0).getShareIndex());
+		bw.newLine();
+
 		bw.close();
         
 	}
