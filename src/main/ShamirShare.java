@@ -48,32 +48,17 @@ public class ShamirShare {
 	
 	public ShamirShare() {};
 	
-//	public ShamirShare(ArrayList<Share> s){
-//		this.shareArr = s;
-//	};
-//	
-//	public ShamirShare(int threshold, int noOfShares, BigInteger prime){
-//		this.threshold = threshold;
-//		this.noOfShares = noOfShares;
-//		this.prime = prime;
-//	};
-	
 	public void split(File file){
 		ArrayList<Share> shareList = new ArrayList<Share>();
-		byte[] secretByte = null;
+		String secret = null;
 		
 		try {
-			secretByte = ReadFileIntoByteArray.getBytesFromFile(file);
+			secret = ReadFileIntoByteArray.getBytesFromFile(file).toString();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		String secret = secretByte.toString();
-    	
-    	String strThreshold = Integer.toString(threshold);
-    	String strNoOfShares = Integer.toString(noOfShares);
 
-		String[] arguments ={"-k", strThreshold, "-n", strNoOfShares, "-sS", secret , "-primeCustom"};
+		String[] arguments ={"-k", Integer.toString(threshold), "-n", Integer.toString(noOfShares), "-sS", secret , "-primeCustom"};
 		
 		SplitOutput output = MainSplit.split(arguments);
         List<ShareInfo> tempList = output.retrieveShares();
@@ -86,19 +71,20 @@ public class ShamirShare {
 
 	}
 	
-	public File combine(){
+	public static File combine(ShamirShare ss){
 		//ShamirShare share = share.getShareArr();
 		File combinedFile = null;
-		BigInteger fileByteBigInt = null;
-		byte[] fileByte = null;
+		BigInteger fileByteBigInt;
+		byte[] fileByte;
     	String threshold = "3";
     	String noOfShares = "6";
-    	String prime = "2545358851974595661189810777";
     	
-		String[] arguments ={"-k", threshold, "-n", noOfShares,"-primeN",prime,
+    	
+		String[] arguments ={"-k", threshold, "-n", noOfShares,"-primeN",prime.toString(),
 				"-s1","242795834786098480354491126",
 				"-s2","441956801228623581432992908",
-				"-s3","707808009237847326782800116"};
+				"-s3","707808009237847326782800116"
+				};
 		fileByteBigInt = MainCombine.combine(arguments);
 		fileByte = fileByteBigInt.toByteArray();
 		try {

@@ -134,7 +134,7 @@ public class ReadFileIntoByteArray {
 	 * @throws IOException
 	 */
 	public static File byteArrayToFile(byte[] bytearray) throws IOException {
-		File file = new File("test.txt");
+		File file = new File("example.txt");
 		file.createNewFile();
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.write(bytearray);
