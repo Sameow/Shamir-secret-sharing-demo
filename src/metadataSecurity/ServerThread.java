@@ -51,7 +51,8 @@ public class ServerThread extends Thread{
 			 		splitFile(fileName, fileSize, socket);
 			 	}	
 			 	if (inputLine.equals("Sending shares.")){ 
-			 		//Shamir secretShare = input.readLine();
+			 		ShamirShare secretShare = new ShamirShare();
+			 		= input.readLine();
 			 		//Store somewhere
 			 	}
 			 	
@@ -80,6 +81,7 @@ public class ServerThread extends Thread{
 	    localFileSlice(shamir);
 	    sendSharesToOthers(shamir);
 	    output.println("File splitting done.");
+	    receivedFile.delete();
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
@@ -97,8 +99,8 @@ public class ServerThread extends Thread{
 		bw.newLine();
 		bw.write(shamir.getShareArr().get(0).getShareIndex());
 		bw.newLine();
-
 		bw.close();
+		shamir.getShareArr().remove(0);
         
 	}
 	
@@ -114,7 +116,7 @@ public class ServerThread extends Thread{
 			e.printStackTrace();
 		}
 		 for (int i=0; i<otherServerIP.size(); i++) {
-		 SendingThread serverthread = new SendingThread(new Socket(otherServerIP.get(i), 4444), shamir);
+		 SendingThread serverthread = new SendingThread(new Socket(otherServerIP.get(i), 4444), shamir, i);
 		 serverthread.start();
 		 }
 

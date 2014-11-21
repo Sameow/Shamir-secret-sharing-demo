@@ -12,12 +12,12 @@ import main.ShamirShare;
 public class SendingThread extends Thread {
 	private PrintWriter output;
 	private BufferedReader input;
-	private Socket socket;
 	private ShamirShare shamir;
+	private int shareIndex;
 	
-	public SendingThread(Socket socket, ShamirShare shamir) {
-		this.socket=socket;
+	public SendingThread(Socket socket, ShamirShare shamir, int i) {
 		this.shamir=shamir;
+		this.shareIndex=i;
 		try {
 			output = new PrintWriter(socket.getOutputStream(), true);
 			input = new BufferedReader(
@@ -37,8 +37,8 @@ public class SendingThread extends Thread {
 			output.println(shamir.getNoOfShares());
 			output.println(shamir.getPrime().toString());
 			output.println(shamir.getThreshold());
-			output.println(shamir.getShareArr().get(0).getShare().toString());
-			output.println(shamir.getShareArr().get(0).getShareIndex());
+			output.println(shamir.getShareArr().get(shareIndex).getShare().toString());
+			output.println(shamir.getShareArr().get(shareIndex).getShareIndex());
 			
     		String inputLine;
     		try {
