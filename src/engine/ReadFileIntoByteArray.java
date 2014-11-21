@@ -27,8 +27,13 @@ package engine;
 * =============================================================================
 */
 
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -84,45 +89,53 @@ public class ReadFileIntoByteArray {
   * @return byte[] Returns a byte[] array of the contents of the file
   */
  public static byte[] getBytesFromFile(File file) throws IOException {
-
-     InputStream is = new FileInputStream(file);
-//     System.out.println("\nDEBUG: FileInputStream is " + file);
-
-     // Get the size of the file
-     long length = file.length();
-//     System.out.println("DEBUG: Length of " + file + " is " + length + "\n");
-
-     /*
-      * You cannot create an array using a long type. It needs to be an int
-      * type. Before converting to an int type, check to ensure that file is
-      * not loarger than Integer.MAX_VALUE;
-      */
-     if (length > Integer.MAX_VALUE) {
-         System.out.println("File is too large to process");
-         return null;
-     }
-
-     // Create the byte array to hold the data
-     byte[] bytes = new byte[(int)length];
-
-     // Read in the bytes
-     int offset = 0;
-     int numRead = 0;
-     while ( (offset < bytes.length)
-             &&
-             ( (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) ) {
-
-         offset += numRead;
-
-     }
-
-     // Ensure all the bytes have been read in
-     if (offset < bytes.length) {
-         throw new IOException("Could not completely read file " + file.getName());
-     }
-
-     is.close();
-     return bytes;
+	 
+	 FileInputStream fileInputStream=null;
+	 byte[] fileByte = new byte[(int) file.length()];
+	 
+	 fileInputStream = new FileInputStream(file);
+	 fileInputStream.read(fileByte);
+	 fileInputStream.close();
+	    
+	 return fileByte;
+//     InputStream is = new FileInputStream(file);
+////     System.out.println("\nDEBUG: FileInputStream is " + file);
+//
+//     // Get the size of the file
+//     long length = file.length();
+////     System.out.println("DEBUG: Length of " + file + " is " + length + "\n");
+//
+//     /*
+//      * You cannot create an array using a long type. It needs to be an int
+//      * type. Before converting to an int type, check to ensure that file is
+//      * not larger than Integer.MAX_VALUE;
+//      */
+//     if (length > Integer.MAX_VALUE) {
+//         System.out.println("File is too large to process");
+//         return null;
+//     }
+//
+//     // Create the byte array to hold the data
+//     byte[] bytes = new byte[(int)length];
+//
+//     // Read in the bytes
+//     int offset = 0;
+//     int numRead = 0;
+//     while ( (offset < bytes.length)
+//             &&
+//             ( (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) ) {
+//
+//         offset += numRead;
+//
+//     }
+//
+//     // Ensure all the bytes have been read in
+//     if (offset < bytes.length) {
+//         throw new IOException("Could not completely read file " + file.getName());
+//     }
+//
+//     is.close();
+//     return bytes;
 
  }
 
@@ -133,42 +146,56 @@ public class ReadFileIntoByteArray {
 	 * @return
 	 * @throws IOException
 	 */
-	public static File byteArrayToFile(byte[] bytearray) throws IOException {
-		File file = new File("example.txt");
-		file.createNewFile();
-		FileOutputStream fos = new FileOutputStream(file);
-		fos.write(bytearray);
-		fos.close();
-		return file;
+	public static void byteArrayToFile(byte[] byteArray, String fileName) throws IOException {
+		
+//		File file = new File(fileName);
+		FileOutputStream fileOuputStream = new FileOutputStream(fileName); 
+	    fileOuputStream.write(byteArray);
+	    
+	    fileOuputStream.close();
+		
+	    
+//		String content = new String(byteArray, "UTF-8");
+//		System.out.println(content);
+//		File file = new File(fileName);
+//		FileWriter fw = new FileWriter(file.getAbsoluteFile());
+//		BufferedWriter bw = new BufferedWriter(fw);
+//		
+//		bw.write(content);
+//		bw.newLine();
+//		
+//		bw.close();
+		
+		//return file;
 	}
 
  /**
   * Sole entry point to the class and application.
   * @param args Array of String arguments.
   */
- public static void main(String[] args) {
-
-     byte[] fileArray = null;
-
-     try {
-         fileArray = getBytesFromFile(new File("README_InputFile.txt"));
-     } catch (IOException e) {
-         e.printStackTrace();
-     }
-
-     if (fileArray != null) {
-         for (int i=0; i<fileArray.length; i++) {
-
-             System.out.println(
-                 "fileArray[" + i + "] = " +
-                 ((int)fileArray[i] < 9  ? "  " : "") +
-                 ( ((int)fileArray[i] > 9 && (int)fileArray[i] <= 99) ? " " : "") +
-                 fileArray[i] + " : " +
-                 " HEX=(0x" + byteToHex(fileArray[i]) + ") : " +
-                 " charValue=(" + (char)fileArray[i] + ")");
-         }
-     }
-
- }
+// public static void main(String[] args) {
+//
+//     byte[] fileArray = null;
+//
+//     try {
+//         fileArray = getBytesFromFile(new File("README_InputFile.txt"));
+//     } catch (IOException e) {
+//         e.printStackTrace();
+//     }
+//
+//     if (fileArray != null) {
+//         for (int i=0; i<fileArray.length; i++) {
+//
+//             System.out.println(
+//                 "fileArray[" + i + "] = " +
+//                 ((int)fileArray[i] < 9  ? "  " : "") +
+//                 ( ((int)fileArray[i] > 9 && (int)fileArray[i] <= 99) ? " " : "") +
+//                 fileArray[i] + " : " +
+//                 " HEX=(0x" + byteToHex(fileArray[i]) + ") : " +
+//                 " charValue=(" + (char)fileArray[i] + ")");
+//         }
+//     }
+//
+// }
 
 }

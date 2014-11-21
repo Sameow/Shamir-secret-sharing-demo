@@ -15,11 +15,18 @@ import engine.SecretShare.ShareInfo;
 
 public class ShamirShare {
 
+	private String fileName = null;
 	private BigInteger prime = null;
 	private int threshold = 2;
 	private int noOfShares = 3;
 	private ArrayList<Share> shareArr = new ArrayList<Share>();
 	
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 	public ArrayList<Share> getShareArr() {
 		return shareArr;
 	}
@@ -49,9 +56,10 @@ public class ShamirShare {
 	public ShamirShare() {};
 	
 	public void split(File file){
+		
+		this.setFileName(file.getName());
 		ArrayList<Share> shareList = new ArrayList<Share>();
 		String secret = null;
-		
 		try {
 			secret = ReadFileIntoByteArray.getBytesFromFile(file).toString();
 		} catch (IOException e) {
@@ -72,15 +80,13 @@ public class ShamirShare {
 	}
 	
 	public static File combine(ShamirShare ss){
-		//ShamirShare share = share.getShareArr();
 		File combinedFile = null;
 		BigInteger fileByteBigInt;
 		byte[] fileByte;
-    	String threshold = "3";
-    	String noOfShares = "6";
     	
     	
-		String[] arguments ={"-k", threshold, "-n", noOfShares,"-primeN",prime.toString(),
+		String[] arguments ={"-k", Integer.toString(ss.getThreshold()), "-n", Integer.toString(ss.getNoOfShares()),
+				"-primeN",ss.getPrime().toString(),
 				"-s1","242795834786098480354491126",
 				"-s2","441956801228623581432992908",
 				"-s3","707808009237847326782800116"
@@ -88,11 +94,17 @@ public class ShamirShare {
 		fileByteBigInt = MainCombine.combine(arguments);
 		fileByte = fileByteBigInt.toByteArray();
 		try {
-			combinedFile = ReadFileIntoByteArray.byteArrayToFile(fileByte);
+			ReadFileIntoByteArray.byteArrayToFile(fileByte,ss.getFileName());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+//		try {
+//			combinedFile = ReadFileIntoByteArray.byteArrayToFile(fileByte,ss.getFileName());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		
 		return combinedFile; 
