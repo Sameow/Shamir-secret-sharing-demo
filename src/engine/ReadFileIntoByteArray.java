@@ -37,6 +37,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 
 /**
 * -----------------------------------------------------------------------------
@@ -98,44 +99,6 @@ public class ReadFileIntoByteArray {
 	 fileInputStream.close();
 	    
 	 return fileByte;
-//     InputStream is = new FileInputStream(file);
-////     System.out.println("\nDEBUG: FileInputStream is " + file);
-//
-//     // Get the size of the file
-//     long length = file.length();
-////     System.out.println("DEBUG: Length of " + file + " is " + length + "\n");
-//
-//     /*
-//      * You cannot create an array using a long type. It needs to be an int
-//      * type. Before converting to an int type, check to ensure that file is
-//      * not larger than Integer.MAX_VALUE;
-//      */
-//     if (length > Integer.MAX_VALUE) {
-//         System.out.println("File is too large to process");
-//         return null;
-//     }
-//
-//     // Create the byte array to hold the data
-//     byte[] bytes = new byte[(int)length];
-//
-//     // Read in the bytes
-//     int offset = 0;
-//     int numRead = 0;
-//     while ( (offset < bytes.length)
-//             &&
-//             ( (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) ) {
-//
-//         offset += numRead;
-//
-//     }
-//
-//     // Ensure all the bytes have been read in
-//     if (offset < bytes.length) {
-//         throw new IOException("Could not completely read file " + file.getName());
-//     }
-//
-//     is.close();
-//     return bytes;
 
  }
 
@@ -149,11 +112,17 @@ public class ReadFileIntoByteArray {
 	public static void byteArrayToFile(byte[] byteArray, String fileName) throws IOException {
 		
 //		File file = new File(fileName);
+		String s = new String(byteArray, "UTF-8");
+//		System.out.println(" This is to String from byte array "+new String(byteArray));
+		System.out.println(fileName+"," + byteArray+"," +s);
+		
 		FileOutputStream fileOuputStream = new FileOutputStream(fileName); 
-	    fileOuputStream.write(byteArray);
+		for(int i=0; i<byteArray.length; i++){
+	    fileOuputStream.write(byteArray[i]);
+		}
 	    
 	    fileOuputStream.close();
-		
+	
 	    
 //		String content = new String(byteArray, "UTF-8");
 //		System.out.println(content);

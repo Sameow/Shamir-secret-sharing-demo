@@ -2,9 +2,13 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
 
 import main.MainSplit.SplitOutput;
 import engine.ReadFileIntoByteArray;
@@ -61,39 +65,50 @@ public class ShamirShare {
 		ArrayList<Share> shareList = new ArrayList<Share>();
 		String secret = null;
 		try {
-			secret = ReadFileIntoByteArray.getBytesFromFile(file).toString();
+			///////////////////////////////
+			secret=new String(ReadFileIntoByteArray.getBytesFromFile(file));
+		//	System.out.println("this is content "+s);
+			//////////////////////////////
+			
+			System.out.println("Secret = "+secret);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		String[] arguments ={"-k", Integer.toString(threshold), "-n", Integer.toString(noOfShares), "-sS", secret , "-primeCustom"};
-		
 		SplitOutput output = MainSplit.split(arguments);
         List<ShareInfo> tempList = output.retrieveShares();
         for(int i = 0; i<tempList.size(); i++){
         	Share share = new Share(tempList.get(i).getIndex(), tempList.get(i).getShare());
         	shareList.add(share);
         }
+        
 		this.setShareArr(shareList);
 		this.setPrime(output.getPrime());
 
 	}
 	
-	public static File combine(ShamirShare ss){
+	public static File combine(ShamirShare ss) throws UnsupportedEncodingException{
 		File combinedFile = null;
 		BigInteger fileByteBigInt;
 		byte[] fileByte;
-    	
-    	
+		String prime = ""+ss.getPrime();
+		ArrayList<Share> share = ss.getShareArr();
+		
+		
+		
 		String[] arguments ={"-k", Integer.toString(ss.getThreshold()), "-n", Integer.toString(ss.getNoOfShares()),
-				"-primeN",ss.getPrime().toString(),
-				"-s1","242795834786098480354491126",
-				"-s2","441956801228623581432992908",
-				"-s3","707808009237847326782800116"
+				"-primeN",prime,
+				"-s"+share.get(0).getShareIndex(),share.get(0).getShare().toString(),
+				"-s"+share.get(1).getShareIndex(),share.get(1).getShare().toString()
 				};
 		fileByteBigInt = MainCombine.combine(arguments);
+		/////
+		///error here???
 		fileByte = fileByteBigInt.toByteArray();
+		////
 		try {
+			
 			ReadFileIntoByteArray.byteArrayToFile(fileByte,ss.getFileName());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -109,4 +124,5 @@ public class ShamirShare {
 		
 		return combinedFile; 
 	}
+	
 }

@@ -3,7 +3,9 @@ package main;
 import java.math.BigInteger;
 
 public class Share {
-	private BigInteger share = null;
+	private BigInteger share;
+	private int shareIndex;
+	
 	public BigInteger getShare() {
 		return share;
 	}
@@ -16,7 +18,6 @@ public class Share {
 	public void setShareIndex(int shareIndex) {
 		this.shareIndex = shareIndex;
 	}
-	private int shareIndex = 0;
 	
 	public Share(int shareIndex, BigInteger share){
 		this.shareIndex = shareIndex;

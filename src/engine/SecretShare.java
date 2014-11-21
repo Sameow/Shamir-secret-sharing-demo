@@ -63,7 +63,7 @@ public class SecretShare
     public static BigInteger createModulus(BigInteger secret){
     	Random random = new SecureRandom();
     	//final int certainty = 100;
-    	int modLength = secret.bitLength() + 5;
+    	int modLength = secret.bitLength() + 1;
     	BigInteger mod = null;
     	
     	//generates a mod as long as mod is null or secret is bigger than mod
@@ -71,7 +71,7 @@ public class SecretShare
     		
     		//mod = new BigInteger(modLength, certainty, random);
     		mod = BigInteger.probablePrime(modLength,random);
-    	
+    		
     	}
     	
     	return mod;
