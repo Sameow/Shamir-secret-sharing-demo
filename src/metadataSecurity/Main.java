@@ -87,7 +87,12 @@ public class Main extends JPanel
         	try {
 				Client client = new Client();
 				client.getFile();
-	            log.append("File combined." + newline);
+				if(client.isFileCombined()){
+					log.append("File combined." + newline);
+	            }
+				else {
+					log.append("File combined failed."+ newline);
+				}
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

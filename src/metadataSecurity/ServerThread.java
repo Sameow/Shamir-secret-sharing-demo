@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,6 +45,12 @@ public class ServerThread extends Thread{
          try {
 			while ((inputLine = input.readLine()) != null) {
 			 	if (inputLine.equals("Combine file.")){
+			 		File file = new File(InetAddress.getLocalHost()+"FileShare.txt");
+			 		byte[] fileByte = new byte[(int) file.length()];		 
+			 		FileInputStream fileInputStream = new FileInputStream(file);
+			 		fileInputStream.read(fileByte);
+			 		fileInputStream.close();
+			 		 
 			 		combineFile();
 			 	}
 			 	if (inputLine.equals("Split file.")){ 

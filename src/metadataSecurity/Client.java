@@ -10,6 +10,7 @@ public class Client {
 	private PrintWriter output;
 	private BufferedReader input;
 	private boolean fileSplited;
+	private boolean fileCombined;
 	private ClientThread clientThread;
 	
 	public boolean isFileSplited() {
@@ -18,6 +19,14 @@ public class Client {
 
 	public void setFileSplited(boolean fileSplited) {
 		this.fileSplited = fileSplited;
+	}
+
+	public boolean isFileCombined() {
+		return fileCombined;
+	}
+
+	public void setFileCombined(boolean fileCombined) {
+		this.fileCombined = fileCombined;
 	}
 
 	public Client() throws IOException {
@@ -60,7 +69,7 @@ public class Client {
 			// get the property value and print it out
 			Enumeration<?> e = prop.elements();
 			while (e.hasMoreElements()) {
-				InetAddress serverIP = (InetAddress) e.nextElement();
+				InetAddress serverIP = InetAddress.getByName((String) e.nextElement());
 				serverIPs.add(serverIP);
 			}
 		} catch (IOException ex) {
@@ -81,10 +90,12 @@ public class Client {
 		output.println("Split file.");
 		output.println(file.getName());
 		output.println(file.length());
+		byte[] fileByte = new byte[(int) file.length()];
 		FileInputStream userInput = new FileInputStream(file);
-        if (userInput != null) {
-            output.println(userInput);
-        }      
+		userInput.read(fileByte);
+        output.println(new String(fileByte));
+        userInput.close();
+             
         String serverResult;
         while ((serverResult = input.readLine()) != null) {
             if (serverResult.equals("File splitting done.")) {
@@ -95,20 +106,19 @@ public class Client {
         }
 	}
 	
-	public File getFile() throws IOException {
+	public void getFile() throws IOException {
 		output.println("Combine file.");
-		String fileName = input.readLine();
-		File combinedFile = new File(fileName);
+		File combinedFile = new File(input.readLine());
 		FileOutputStream fos = new FileOutputStream(combinedFile,true);
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
-		byte[] mybytearray = new byte[1024];
+		byte[] mybytearray = new byte[Integer.parseInt(input.readLine())];
         InputStream is = this.clientThread.getSocket().getInputStream();
         int bytesRead = is.read(mybytearray, 0, mybytearray.length);
         bos.write(mybytearray, 0, bytesRead);
 	    fos.flush();
 	    bos.close();
-	    fos.close();
-	    return combinedFile;   
+	    fos.close();  
+	    this.setFileCombined(true);
         }
 	
 	 public static void main(String[] args) throws IOException {

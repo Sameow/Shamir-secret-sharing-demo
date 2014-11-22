@@ -101,11 +101,6 @@ public class ReadFileIntoByteArray {
 	 */
 	public static void byteArrayToFile(byte[] byteArray, String fileName) throws IOException {
 		
-//		File file = new File(fileName);
-		String s = new String(byteArray, "UTF-8");
-//		System.out.println(" This is to String from byte array "+new String(byteArray));
-		System.out.println(fileName+"," + byteArray+"," +s);
-		
 		FileOutputStream fileOuputStream = new FileOutputStream(fileName); 
 		for(int i=0; i<byteArray.length; i++){
 	    fileOuputStream.write(byteArray[i]);
