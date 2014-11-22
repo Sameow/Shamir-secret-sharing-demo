@@ -45,13 +45,9 @@ public class ServerThread extends Thread{
          try {
 			while ((inputLine = input.readLine()) != null) {
 			 	if (inputLine.equals("Combine file.")){
-			 		File file = new File(InetAddress.getLocalHost()+"FileShare.txt");
-			 		byte[] fileByte = new byte[(int) file.length()];		 
-			 		FileInputStream fileInputStream = new FileInputStream(file);
-			 		fileInputStream.read(fileByte);
-			 		fileInputStream.close();
-			 		 
-			 		combineFile();
+			 		ShamirShare fileShares = getAllFileSlice();
+			 		ShamirShare toCombine = new ShamirShare();
+			 		toCombine.combine(fileShares);
 			 	}
 			 	if (inputLine.equals("Split file.")){ 
 			 		String fileName = input.readLine();
@@ -79,6 +75,12 @@ public class ServerThread extends Thread{
 			e.printStackTrace();
 		}
 	}
+	private ShamirShare getAllFileSlice() {
+		
+		return null;
+		
+		
+	}
 	private void splitFile(String fileName, int fileSize, Socket clientSocket) throws IOException{
 		File receivedFile = new File(fileName);
 		FileOutputStream fos = new FileOutputStream(receivedFile,true);
@@ -99,21 +101,21 @@ public class ServerThread extends Thread{
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
-		File file = new File(InetAddress.getLocalHost()+"FileShare.txt");
+		File file = new File(shamir.getFileName());
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		
 		bw.write(shamir.getFileName());
 		bw.newLine();
-		bw.write(shamir.getNoOfShares());
+		bw.write(""+shamir.getNoOfShares());
 		bw.newLine();
-		bw.write(shamir.getPrime().toString());
+		bw.write(new String(shamir.getPrime().toByteArray()));
 		bw.newLine();
-		bw.write(shamir.getThreshold());
+		bw.write(""+shamir.getThreshold());
 		bw.newLine();
-		bw.write(shamir.getShareArr().get(0).getShare().toString());
+		bw.write(new String(shamir.getShareArr().get(0).getShare().toByteArray()));
 		bw.newLine();
-		bw.write(shamir.getShareArr().get(0).getShareIndex());
+		bw.write(""+shamir.getShareArr().get(0).getShareIndex());
 		bw.newLine();
 		bw.close();
 		shamir.getShareArr().remove(0);

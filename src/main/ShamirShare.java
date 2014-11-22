@@ -90,7 +90,7 @@ public class ShamirShare {
 		byte[] fileByte;
 		String prime = ""+ss.getPrime();
 		ArrayList<Share> share = ss.getShareArr();
-		ss.setFileName("OutputOf"+ss.getFileName());
+		ss.setFileName(ss.getFileName());
 		
 		if (ss.getShareArr().size()>=ss.getThreshold()){
 		String[] arguments ={"-k", Integer.toString(ss.getThreshold()), "-n", Integer.toString(ss.getNoOfShares()),
