@@ -65,10 +65,7 @@ public class ShamirShare {
 		ArrayList<Share> shareList = new ArrayList<Share>();
 		String secret = null;
 		try {
-			///////////////////////////////
 			secret=new String(ReadFileIntoByteArray.getBytesFromFile(file));
-		//	System.out.println("this is content "+s);
-			//////////////////////////////
 			
 			System.out.println("Secret = "+secret);
 		} catch (IOException e) {
@@ -88,41 +85,31 @@ public class ShamirShare {
 
 	}
 	
-	public static File combine(ShamirShare ss) throws UnsupportedEncodingException{
-		File combinedFile = null;
+	public void combine(ShamirShare ss) throws UnsupportedEncodingException{
 		BigInteger fileByteBigInt;
 		byte[] fileByte;
 		String prime = ""+ss.getPrime();
 		ArrayList<Share> share = ss.getShareArr();
 		
-		
-		
+		if (ss.getShareArr().size()>=ss.getThreshold()){
 		String[] arguments ={"-k", Integer.toString(ss.getThreshold()), "-n", Integer.toString(ss.getNoOfShares()),
 				"-primeN",prime,
 				"-s"+share.get(0).getShareIndex(),share.get(0).getShare().toString(),
 				"-s"+share.get(1).getShareIndex(),share.get(1).getShare().toString()
 				};
 		fileByteBigInt = MainCombine.combine(arguments);
-		/////
-		///error here???
 		fileByte = fileByteBigInt.toByteArray();
-		////
 		try {
 			
 			ReadFileIntoByteArray.byteArrayToFile(fileByte,ss.getFileName());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		try {
-//			combinedFile = ReadFileIntoByteArray.byteArrayToFile(fileByte,ss.getFileName());
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
-		
-		return combinedFile; 
+		}
+		else {
+			System.out.println("Not enough shares la!");
+		}
 	}
 	
 }

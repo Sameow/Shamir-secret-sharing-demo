@@ -9,7 +9,7 @@ public class TEST {
 		ShamirShare test = new ShamirShare();
 		test.split(file);
 		printStuff(test);
-		combine(test);
+		test.combine(test);
 	}
 	
 	public static void printStuff(ShamirShare test){
@@ -23,15 +23,5 @@ public class TEST {
 		//Write to a new file with all the info
 			//Send file to other server
 		}
-	}
-	
-	public static void combine(ShamirShare s) throws UnsupportedEncodingException{
-		if (s.getShareArr().size()>=s.getThreshold()){
-			ShamirShare.combine(s);
-		}
-		else {
-			System.out.println("Not enough shares la!");
-		}
-		
 	}
 }
