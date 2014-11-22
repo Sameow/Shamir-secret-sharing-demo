@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -52,8 +53,14 @@ public class ServerThread extends Thread{
 			 	}	
 			 	if (inputLine.equals("Sending shares.")){ 
 			 		ShamirShare secretShare = new ShamirShare();
-			 		= input.readLine();
-			 		//Store somewhere
+			 		secretShare.setFileName(input.readLine());
+			 		secretShare.setNoOfShares(Integer.parseInt((input.readLine())));
+			 		secretShare.setPrime(new BigInteger(input.readLine().getBytes()));
+			 		secretShare.setThreshold(Integer.parseInt((input.readLine())));
+			 		secretShare.getShareArr().get(0).setShare(new BigInteger(input.readLine().getBytes()));
+			 		secretShare.getShareArr().get(0).setShareIndex(Integer.parseInt((input.readLine())));
+			 		output.println("Acknowledged");
+			 		localFileSlice(secretShare);
 			 	}
 			 	
 			 	}
@@ -89,6 +96,8 @@ public class ServerThread extends Thread{
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		
+		bw.write(shamir.getFileName());
+		bw.newLine();
 		bw.write(shamir.getNoOfShares());
 		bw.newLine();
 		bw.write(shamir.getPrime().toString());

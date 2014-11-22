@@ -34,10 +34,11 @@ public class SendingThread extends Thread {
 	
 	public void run(){
     		output.println("Sending shares.");
+    		output.println(shamir.getFileName());
 			output.println(shamir.getNoOfShares());
-			output.println(shamir.getPrime().toString());
+			output.println(new String(shamir.getPrime().toByteArray()));
 			output.println(shamir.getThreshold());
-			output.println(shamir.getShareArr().get(shareIndex).getShare().toString());
+			output.println(new String(shamir.getShareArr().get(shareIndex).getShare().toByteArray()));
 			output.println(shamir.getShareArr().get(shareIndex).getShareIndex());
 			
     		String inputLine;
