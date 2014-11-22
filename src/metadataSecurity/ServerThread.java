@@ -92,7 +92,7 @@ public class ServerThread extends Thread{
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
-		File file = new File("FileShare.txt");
+		File file = new File(InetAddress.getLocalHost()+"FileShare.txt");
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		
