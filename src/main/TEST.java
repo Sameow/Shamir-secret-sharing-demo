@@ -5,10 +5,10 @@ import java.io.UnsupportedEncodingException;
 
 public class TEST {
 	public static void main(String[] args) throws UnsupportedEncodingException{
-		File file = new File("C:/Users/L335a10/Desktop/Hello.txt");
+		File file = new File("TextFile.txt");
 		ShamirShare test = new ShamirShare();
 		test.split(file);
-		printStuff(test);
+	//	printStuff(test);
 		test.combine(test);
 	}
 	
