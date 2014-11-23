@@ -13,8 +13,16 @@ import main.Share;
 
 public class ServerToServerThread extends Thread {
 	private Socket socket = null;
-	private ShamirShare slice;
-	 public ServerToServerThread(Socket socket) {
+	private Share share;
+	 public Share getShare() {
+		return share;
+	}
+
+	public void setShare(Share share) {
+		this.share = share;
+	}
+
+	public ServerToServerThread(Socket socket) {
 		this.socket=socket;
 	}
 
@@ -26,17 +34,15 @@ public class ServerToServerThread extends Thread {
 	                    socket.getInputStream()));
 	        ) {
 	        	output.println("Give me slice.");
-	            	slice=new ShamirShare();
-	            	slice.setFileName(input.readLine());
-	            	slice.setNoOfShares(Integer.parseInt(input.readLine()));
-	            	slice.setPrime(new BigInteger(input.readLine().getBytes()));
+//	            	slice=new ShamirShare();
+//	            	slice.setFileName(input.readLine());
+//	            	slice.setNoOfShares(Integer.parseInt(input.readLine()));
+//	            	slice.setPrime(new BigInteger(input.readLine().getBytes()));
+//	        		slice.setThreshold(Integer.parseInt(input.readLine()));
 	            	int shareIndex = Integer.parseInt(input.readLine());
-	            	BigInteger share = new BigInteger(input.readLine().getBytes());
-	            	Share newShare = new Share(shareIndex, share);
-	            	ArrayList<Share> shares= new ArrayList<Share>();
-	            	shares.add(newShare);
-	            	slice.setShareArr(shares);
-	            	slice.setThreshold(Integer.parseInt(input.readLine()));
+	            	BigInteger secretShare = new BigInteger(input.readLine().getBytes());
+	            	setShare(new Share(shareIndex, secretShare));
+	            	
 	            }
 	         catch (IOException e) {
 				e.printStackTrace();

@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -21,6 +22,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import main.ShamirShare;
+import main.Share;
 
 public class ServerThread extends Thread{
 	private PrintWriter output;
@@ -70,11 +72,11 @@ public class ServerThread extends Thread{
 			 		localFileSlice(secretShare);
 			 	}
 			 	if (inputLine.equals("Give me slice.")){
-			 		File file = new File(input.readLine());
-					FileWriter fw = new FileWriter(file.getAbsoluteFile());
-					BufferedWriter bw = new BufferedWriter(fw);
+			 		ShamirShare local = getLocalSlice();
+			 		output.println(""+local.getShareArr().get(0).getShareIndex());
+			 		output.println(new String(local.getShareArr().get(0).getShare().toByteArray()));
 			 	}
-			 	}
+			 }
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,17 +86,7 @@ public class ServerThread extends Thread{
 		}
 	}
 	private ShamirShare getAllFileSlice() throws IOException {
-		File localSlice = new File("fileSlice.txt");
-		FileReader fileReader = new FileReader(localSlice);
-		BufferedReader br = new BufferedReader(fileReader);
-		ShamirShare local = new ShamirShare();
-		local.setFileName(br.readLine());
-		local.setNoOfShares(Integer.parseInt(br.readLine()));
-		local.setPrime(new BigInteger(br.readLine().getBytes()));
- 		local.setThreshold(Integer.parseInt((br.readLine())));
- 		local.getShareArr().get(0).setShare(new BigInteger(br.readLine().getBytes()));
- 		local.getShareArr().get(0).setShareIndex(Integer.parseInt((br.readLine())));
-		fileReader.close();
+		ShamirShare local = getLocalSlice();
 		
 		ArrayList<InetAddress> serverIPs = null;
 		try {
@@ -110,9 +102,28 @@ public class ServerThread extends Thread{
 			askForSlice.start();
 			ServerToServerThreads.add(askForSlice);
 		}
-		return null;	
+		
+		for (int i=0; i<ServerToServerThreads.size(); i++){
+			Share anotherShare = ServerToServerThreads.get(i).getShare();
+			local.getShareArr().add(anotherShare);
+		}
+		return local;	
 	}
 	
+	private ShamirShare getLocalSlice() throws IOException {
+		File localSlice = new File("fileSlice.txt");
+		FileReader fileReader = new FileReader(localSlice);
+		BufferedReader br = new BufferedReader(fileReader);
+		ShamirShare local = new ShamirShare();
+		local.setFileName(br.readLine());
+		local.setNoOfShares(Integer.parseInt(br.readLine()));
+		local.setPrime(new BigInteger(br.readLine().getBytes()));
+ 		local.setThreshold(Integer.parseInt((br.readLine())));
+ 		local.getShareArr().get(0).setShare(new BigInteger(br.readLine().getBytes()));
+ 		local.getShareArr().get(0).setShareIndex(Integer.parseInt((br.readLine())));
+		fileReader.close();
+		return local;
+	}
 	private void splitFile(String fileName, int fileSize, Socket clientSocket) throws IOException{
 		File receivedFile = new File(fileName);
 		FileOutputStream fos = new FileOutputStream(receivedFile,true);
