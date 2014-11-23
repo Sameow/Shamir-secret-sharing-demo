@@ -9,6 +9,7 @@ import java.util.Properties;
 public class Client {
 	private PrintWriter output;
 	private BufferedReader input;
+	private Socket socket;
 	private boolean fileSplited;
 	private boolean fileCombined;
 	private ClientThread clientThread;
@@ -41,6 +42,7 @@ public class Client {
 				for (int i=0; i<ClientThreads.size(); i++){
 					if(ClientThreads.get(i).isThisOneConnectedLiao()){
 						this.clientThread=ClientThreads.get(i);
+						this.socket=ClientThreads.get(i).getSocket();
 					}
 					else {
 						ClientThreads.get(i).getSocket().close();
@@ -93,7 +95,7 @@ public class Client {
 		byte[] fileByte = new byte[(int) file.length()];
 		FileInputStream userInput = new FileInputStream(file);
 		userInput.read(fileByte);
-        output.println(new String(fileByte));
+        this.socket.getOutputStream().write(fileByte);
         userInput.close();
              
         String serverResult;

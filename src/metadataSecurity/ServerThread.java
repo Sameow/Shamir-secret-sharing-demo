@@ -6,8 +6,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.math.BigInteger;
@@ -15,6 +17,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Properties;
 
 import main.ShamirShare;
 
@@ -65,7 +69,11 @@ public class ServerThread extends Thread{
 			 		output.println("Acknowledged");
 			 		localFileSlice(secretShare);
 			 	}
-			 	
+			 	if (inputLine.equals("Give me slice.")){
+			 		File file = new File(input.readLine());
+					FileWriter fw = new FileWriter(file.getAbsoluteFile());
+					BufferedWriter bw = new BufferedWriter(fw);
+			 	}
 			 	}
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
@@ -75,12 +83,36 @@ public class ServerThread extends Thread{
 			e.printStackTrace();
 		}
 	}
-	private ShamirShare getAllFileSlice() {
+	private ShamirShare getAllFileSlice() throws IOException {
+		File localSlice = new File("fileSlice.txt");
+		FileReader fileReader = new FileReader(localSlice);
+		BufferedReader br = new BufferedReader(fileReader);
+		ShamirShare local = new ShamirShare();
+		local.setFileName(br.readLine());
+		local.setNoOfShares(Integer.parseInt(br.readLine()));
+		local.setPrime(new BigInteger(br.readLine().getBytes()));
+ 		local.setThreshold(Integer.parseInt((br.readLine())));
+ 		local.getShareArr().get(0).setShare(new BigInteger(br.readLine().getBytes()));
+ 		local.getShareArr().get(0).setShareIndex(Integer.parseInt((br.readLine())));
+		fileReader.close();
 		
-		return null;
-		
-		
+		ArrayList<InetAddress> serverIPs = null;
+		try {
+			serverIPs = getOtherServerIP();
+		}
+		catch (UnknownHostException e) {
+			System.out.println("Cannot get other server's IP.");
+			e.printStackTrace();
+		}
+		ArrayList<ServerToServerThread> ServerToServerThreads = new ArrayList<ServerToServerThread>();
+		for (int i=0; i<serverIPs.size(); i++){
+			ServerToServerThread askForSlice = new ServerToServerThread(new Socket(serverIPs.get(i), 4444));
+			askForSlice.start();
+			ServerToServerThreads.add(askForSlice);
+		}
+		return null;	
 	}
+	
 	private void splitFile(String fileName, int fileSize, Socket clientSocket) throws IOException{
 		File receivedFile = new File(fileName);
 		FileOutputStream fos = new FileOutputStream(receivedFile,true);
@@ -101,7 +133,7 @@ public class ServerThread extends Thread{
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
-		File file = new File(shamir.getFileName());
+		File file = new File("fileSlice.txt");
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		
@@ -122,10 +154,6 @@ public class ServerThread extends Thread{
         
 	}
 	
-	private void combineFile(){
-			
-		}
-	
 	private void sendSharesToOthers(ShamirShare shamir) throws IOException {
 		try {
 			otherServerIP = getOtherServerIP();
@@ -142,6 +170,29 @@ public class ServerThread extends Thread{
 	private ArrayList<InetAddress> getOtherServerIP() throws UnknownHostException {
 		//get all the server IP
 		ArrayList<InetAddress> serverIPs =new ArrayList<InetAddress>();
+		Properties prop = new Properties();
+		InputStream input = null;
+		try {
+			input = new FileInputStream("serverIP.properties");
+			// load a properties file
+			prop.load(input);
+			// get the property value and print it out
+			Enumeration<?> e = prop.elements();
+			while (e.hasMoreElements()) {
+				InetAddress serverIP = InetAddress.getByName((String) e.nextElement());
+				serverIPs.add(serverIP);
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		for (int i=0; i<serverIPs.size(); i++){
 			if (serverIPs.get(i).equals(InetAddress.getLocalHost())){
 				serverIPs.remove(i);
