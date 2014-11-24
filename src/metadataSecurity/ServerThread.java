@@ -65,8 +65,12 @@ public class ServerThread extends Thread{
 			 		secretShare.setNoOfShares(Integer.parseInt((input.readLine())));
 			 		secretShare.setPrime(new BigInteger(input.readLine().getBytes()));
 			 		secretShare.setThreshold(Integer.parseInt((input.readLine())));
-			 		secretShare.getShareArr().get(0).setShare(new BigInteger(input.readLine().getBytes()));
-			 		secretShare.getShareArr().get(0).setShareIndex(Integer.parseInt((input.readLine())));
+			 		BigInteger tempPrime = new BigInteger(input.readLine().getBytes());
+			 		int tempIndex = Integer.parseInt((input.readLine()));
+			 		Share tempShare = new Share(tempIndex, tempPrime);
+			 		ArrayList<Share> tempArray = new ArrayList<Share>();
+			 		tempArray.add(tempShare);
+			 		secretShare.setShareArr(tempArray);
 			 		output.println("Acknowledged");
 			 		localFileSlice(secretShare);
 			 	}
