@@ -63,6 +63,7 @@ public class ServerThread extends Thread{
 			 		splitFile(fileName, fileSize, socket);
 			 	}	
 			 	if (inputLine.equals("Sending shares.")){ 
+			 		System.out.println("Receiving shares.");
 			 		ShamirShare secretShare = new ShamirShare();
 			 		secretShare.setFileName(input.readLine());
 			 		secretShare.setNoOfShares(Integer.parseInt((input.readLine())));
@@ -177,9 +178,22 @@ public class ServerThread extends Thread{
 			System.out.println("Cannot get other server's IP.");
 			e.printStackTrace();
 		}
+		ArrayList<SendingThread> sendingThreads = new ArrayList<SendingThread>();
 		 for (int i=0; i<otherServerIP.size(); i++) {
 		 SendingThread serverthread = new SendingThread(new Socket(otherServerIP.get(i), 4444), shamir, i);
 		 serverthread.start();
+		 sendingThreads.add(serverthread);
+		 }
+		 try {
+			    Thread.sleep(5000);                 //1000 milliseconds is one second.
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+		 for (int i=0; i<sendingThreads.size(); i++){
+			 if (sendingThreads.get(i).isSent()){
+				 output.println("File splitting done.");
+				 break;
+			 }
 		 }
 
 	}

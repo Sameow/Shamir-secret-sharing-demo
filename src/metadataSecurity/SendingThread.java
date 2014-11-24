@@ -14,7 +14,16 @@ public class SendingThread extends Thread {
 	private BufferedReader input;
 	private ShamirShare shamir;
 	private int shareIndex;
+	private boolean sent;
 	
+	public boolean isSent() {
+		return sent;
+	}
+
+	public void setSent(boolean sent) {
+		this.sent = sent;
+	}
+
 	public SendingThread(Socket socket, ShamirShare shamir, int i) {
 		this.shamir=shamir;
 		this.shareIndex=i;
@@ -45,6 +54,7 @@ public class SendingThread extends Thread {
     		try {
 				while ((inputLine = input.readLine()) != null) {
 				 	if (inputLine.equals("Acknowledged.")){
+				 		this.setSent(true);
 				 		break;
 				 	}
 				 	
