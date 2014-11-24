@@ -54,7 +54,8 @@ public class ServerThread extends Thread{
 			 		ShamirShare toCombine = new ShamirShare();
 			 		toCombine.combine(fileShares);
 			 	}
-			 	if (inputLine.equals("Split file.")){ 
+			 	if (inputLine.equals("Split file.")){
+			 		System.out.println("Splitting file.");
 			 		String fileName = input.readLine();
 			 		int fileSize = Integer.parseInt(input.readLine());
 			 		splitFile(fileName, fileSize, socket);
