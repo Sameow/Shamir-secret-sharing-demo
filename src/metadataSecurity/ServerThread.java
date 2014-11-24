@@ -14,7 +14,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -181,7 +183,7 @@ public class ServerThread extends Thread{
 		 }
 
 	}
-	private ArrayList<InetAddress> getOtherServerIP() throws UnknownHostException {
+	private ArrayList<InetAddress> getOtherServerIP() throws UnknownHostException, SocketException {
 		//get all the server IP
 		ArrayList<InetAddress> serverIPs =new ArrayList<InetAddress>();
 		Properties prop = new Properties();
@@ -207,7 +209,15 @@ public class ServerThread extends Thread{
 				}
 			}
 		}
-		System.out.println("local IP"+InetAddress.getLocalHost().getHostAddress());
+		Enumeration e = NetworkInterface.getNetworkInterfaces();
+		while(e.hasMoreElements()) {
+			NetworkInterface n = (NetworkInterface) e.nextElement();
+			Enumeration ee = n.getInetAddresses();
+			while (ee.hasMoreElements()) {
+				InetAddress i = (InetAddress) ee.nextElement();
+				System.out.println(i.getHostAddress());
+			}
+		}
 		for (int i=0; i<serverIPs.size(); i++){
 			System.out.println("IP to be checked = "+serverIPs.get(i));
 			if (serverIPs.get(i).equals(InetAddress.getLocalHost().getHostAddress())){
