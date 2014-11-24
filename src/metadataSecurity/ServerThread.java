@@ -210,9 +210,9 @@ public class ServerThread extends Thread{
 		for (int i=0; i<serverIPs.size(); i++){
 			if (serverIPs.get(i).equals(InetAddress.getLocalHost())){
 				serverIPs.remove(i);
-				break;
 			}
 		}
+		System.out.println("Sending to "+serverIPs.size()+" servers");
 		return serverIPs;	
 	}
 		
