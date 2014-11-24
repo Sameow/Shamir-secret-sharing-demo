@@ -216,11 +216,12 @@ public class ServerThread extends Thread{
 			Enumeration ee = n.getInetAddresses();
 			while (ee.hasMoreElements()) {
 				InetAddress i = (InetAddress) ee.nextElement();
-				if(i.isLinkLocalAddress()) {
+				if(i.isSiteLocalAddress()) {
 					localIP=i;
 				}
 			}
 		}
+		System.out.println("Local IP = "+localIP);
 		for (int i=0; i<serverIPs.size(); i++){
 			System.out.println("IP to be checked = "+serverIPs.get(i));
 			if (serverIPs.get(i).equals(localIP)){
