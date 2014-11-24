@@ -61,8 +61,6 @@ public class ServerThread extends Thread{
 			 		String fileName = input.readLine();
 			 		int fileSize = Integer.parseInt(input.readLine());
 			 		splitFile(fileName, fileSize, socket);
-//			 		File receivedFile = new File(fileName);
-//			 		receivedFile.delete();
 			 	}	
 			 	if (inputLine.equals("Sending shares.")){ 
 			 		System.out.println("Receiving shares.");
@@ -148,6 +146,7 @@ public class ServerThread extends Thread{
 	    localFileSlice(shamir);
 	    sendSharesToOthers(shamir);
 	    output.println("File splitting done.");
+ 		receivedFile.delete();
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
