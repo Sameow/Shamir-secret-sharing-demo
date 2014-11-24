@@ -12,6 +12,7 @@ public class Client {
 	private Socket socket;
 	private boolean fileSplited;
 	private boolean fileCombined;
+	private boolean noConnection=true;
 	private ClientThread clientThread;
 	
 	public boolean isFileSplited() {
@@ -39,10 +40,18 @@ public class Client {
 					lookForActiveServers.start();
 					ClientThreads.add(lookForActiveServers);
 				}
+				
+				try {
+				    Thread.sleep(5000);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+				    Thread.currentThread().interrupt();
+				}
+				
 				for (int i=0; i<ClientThreads.size(); i++){
-					if(ClientThreads.get(i).isThisOneConnectedLiao()){
+					if(ClientThreads.get(i).isThisOneConnectedLiao() && noConnection){
 						this.clientThread=ClientThreads.get(i);
 						this.socket=ClientThreads.get(i).getSocket();
+						noConnection=false;
 					}
 					else {
 						ClientThreads.get(i).getSocket().close();
@@ -55,7 +64,7 @@ public class Client {
 	            System.err.println("Couldn't get I/O for the connection to " +
 	            		this.clientThread.getSocket().getInetAddress());
 	            System.exit(1);
-	        }
+	        } 
 			this.output = new PrintWriter(this.clientThread.getSocket().getOutputStream(), true);
 			this.input = new BufferedReader(new InputStreamReader(this.clientThread.getSocket().getInputStream()));
 	 }

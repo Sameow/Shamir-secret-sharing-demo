@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -140,7 +139,7 @@ public class ServerThread extends Thread{
 	    localFileSlice(shamir);
 	    sendSharesToOthers(shamir);
 	    output.println("File splitting done.");
-	    receivedFile.delete();
+	//    receivedFile.delete();
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {

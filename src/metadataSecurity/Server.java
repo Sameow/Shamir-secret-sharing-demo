@@ -6,8 +6,10 @@ import java.net.ServerSocket;
 public class Server {
 	public Server(){
 		 try (ServerSocket serverSocket = new ServerSocket(4444)) { 
+			 System.out.println("Server started.");
 	            while (true) {
 	                new ServerThread(serverSocket.accept()).start();
+	                
 	            }
 	        } catch (IOException e) {
 	            System.err.println("Could not listen on port " + 4444);
