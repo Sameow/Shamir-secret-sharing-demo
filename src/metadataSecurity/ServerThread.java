@@ -209,18 +209,21 @@ public class ServerThread extends Thread{
 				}
 			}
 		}
+		InetAddress localIP = null;
 		Enumeration e = NetworkInterface.getNetworkInterfaces();
 		while(e.hasMoreElements()) {
 			NetworkInterface n = (NetworkInterface) e.nextElement();
 			Enumeration ee = n.getInetAddresses();
 			while (ee.hasMoreElements()) {
 				InetAddress i = (InetAddress) ee.nextElement();
-				System.out.println(i.getHostAddress());
+				if(i.isLinkLocalAddress()) {
+					localIP=i;
+				}
 			}
 		}
 		for (int i=0; i<serverIPs.size(); i++){
 			System.out.println("IP to be checked = "+serverIPs.get(i));
-			if (serverIPs.get(i).equals(InetAddress.getLocalHost().getHostAddress())){
+			if (serverIPs.get(i).equals(localIP)){
 				serverIPs.remove(i);
 			}
 		}
