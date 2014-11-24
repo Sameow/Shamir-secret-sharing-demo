@@ -168,7 +168,7 @@ public class ServerThread extends Thread{
 		bw.newLine();
 		bw.close();
 		shamir.getShareArr().remove(0);
-        
+        System.out.println("File share written.");
 	}
 	
 	private void sendSharesToOthers(ShamirShare shamir) throws IOException {
