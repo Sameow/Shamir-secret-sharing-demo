@@ -221,6 +221,10 @@ public class SecretShare
         SplitSecretOutput ret = new SplitSecretOutput(this.publicInfo,
                                                       equation);
 
+        //TODO: Time start
+        long starttime = System.nanoTime();
+        System.out.println("stopwatch started at : "+starttime);
+        
         for (int x = 1, n = publicInfo.getNforSplit() + 1; x < n; x++)
         {
         	
@@ -232,7 +236,15 @@ public class SecretShare
             }
             final ShareInfo share = new ShareInfo(x, data, this.publicInfo);
             ret.sharesInfo.add(share);
+            
+            long endtime = System.nanoTime();
+            long timetaken = endtime - starttime;
+            System.out.println("Time taken for share "+x+" to be generated : "+timetaken);
         }
+        
+        long stoptime = System.nanoTime();
+        long timetaken = stoptime - starttime;
+        System.out.println("Time taken to finish spliting: "+timetaken);
 
         return ret;
     }
@@ -263,6 +275,11 @@ public class SecretShare
         final int size = publicInfo.getK();
         BigInteger[] xarray = new BigInteger[size];
         BigInteger[] fofxarray = new BigInteger[size];
+        
+        //TODO: Time start
+        long starttime = System.nanoTime();
+        System.out.println("Stopwatch started at : "+starttime);
+        
         for (int i = 0, n = size; i < n; i++)
         {
             xarray[i] = usetheseshares.get(i).getXasBigInteger();
@@ -282,6 +299,10 @@ public class SecretShare
             solveSecret = solveSecret.mod(publicInfo.getPrimeModulus());
         }
         ret = new CombineOutput(solveSecret);
+        
+        long stoptime = System.nanoTime();
+        long timetaken = stoptime - starttime;
+        System.out.println("Time taken to finish spliting: "+timetaken);
 
 
         return ret;
