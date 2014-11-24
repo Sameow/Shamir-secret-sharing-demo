@@ -104,6 +104,9 @@ public class Client {
 		byte[] fileByte = new byte[(int) file.length()];
 		FileInputStream userInput = new FileInputStream(file);
 		userInput.read(fileByte);
+		for (int i=0; i<fileByte.length; i++){
+			System.out.print((char)fileByte[i]);
+		}
         this.socket.getOutputStream().write(fileByte);
         userInput.close();
              
