@@ -146,7 +146,7 @@ public class ServerThread extends Thread{
 	    localFileSlice(shamir);
 	    sendSharesToOthers(shamir);
 	    output.println("File splitting done.");
-	//    receivedFile.delete();
+	    receivedFile.delete();
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
