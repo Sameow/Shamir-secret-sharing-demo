@@ -113,6 +113,7 @@ public class Client {
         String serverResult;
         while ((serverResult = input.readLine()) != null) {
             if (serverResult.equals("File splitting done.")) {
+            	System.out.println("File splitting done.");
             	setFileSplited(true);   	
                 break;	
             }

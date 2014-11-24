@@ -191,6 +191,7 @@ public class ServerThread extends Thread{
 			}
 		 for (int i=0; i<sendingThreads.size(); i++){
 			 if (sendingThreads.get(i).isSent()){
+				 System.out.println("File splitting done.");
 				 output.println("File splitting done.");
 				 break;
 			 }
