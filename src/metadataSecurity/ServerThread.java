@@ -207,7 +207,9 @@ public class ServerThread extends Thread{
 				}
 			}
 		}
+		System.out.println("local IP"+InetAddress.getLocalHost());
 		for (int i=0; i<serverIPs.size(); i++){
+			System.out.println("IP to be checked = "+serverIPs.get(i));
 			if (serverIPs.get(i).equals(InetAddress.getLocalHost())){
 				serverIPs.remove(i);
 			}
