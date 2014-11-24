@@ -135,7 +135,6 @@ public class ServerThread extends Thread{
 		byte[] mybytearray = new byte[fileSize];
         int bytesRead = clientSocket.getInputStream().read(mybytearray, 0, mybytearray.length);
         bos.write(mybytearray, 0, bytesRead);
-	    fos.flush();
 	    bos.close();
 	    fos.close();
 	  
