@@ -67,6 +67,7 @@ public class Client {
 	        } 
 			this.output = new PrintWriter(this.clientThread.getSocket().getOutputStream(), true);
 			this.input = new BufferedReader(new InputStreamReader(this.clientThread.getSocket().getInputStream()));
+			output.println("Connected with client");
 	 }
 
 	private ArrayList<InetAddress> getServerIP() {
