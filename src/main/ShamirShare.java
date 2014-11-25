@@ -82,7 +82,6 @@ public class ShamirShare {
         
 		this.setShareArr(shareList);
 		this.setPrime(output.getPrime());
-
 	}
 	
 	public void combine(ShamirShare ss) throws UnsupportedEncodingException{
