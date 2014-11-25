@@ -54,6 +54,7 @@ public class SendingThread extends Thread {
     		try {
 				while ((inputLine = input.readLine()) != null) {
 				 	if (inputLine.equals("Acknowledged.")){
+				 		System.out.println("Sent to servers.");
 				 		this.setSent(true);
 				 		break;
 				 	}
