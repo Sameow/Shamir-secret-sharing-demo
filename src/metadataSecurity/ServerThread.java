@@ -75,6 +75,7 @@ public class ServerThread extends Thread{
 			 		ArrayList<Share> tempArray = new ArrayList<Share>();
 			 		tempArray.add(tempShare);
 			 		secretShare.setShareArr(tempArray);
+			 		
 			 		output.println("Acknowledged");
 			 		localFileSlice(secretShare);
 			 	}
