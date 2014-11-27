@@ -8,6 +8,7 @@ public class Server {
 		 try (ServerSocket serverSocket = new ServerSocket(4444)) { 
 			 System.out.println("Server started.");
 	            while (true) {
+	            	System.out.println("Server awaiting connection.");
 	                new ServerThread(serverSocket.accept()).start();
 	                System.out.println("Client connected.");
 	            }
