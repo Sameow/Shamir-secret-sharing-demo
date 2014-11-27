@@ -63,7 +63,7 @@ public class ServerThread extends Thread{
 			 		splitFile(fileName, fileSize, socket);
 			 	}	
 			 	if (inputLine.equals("Sending shares.")){ 
-			 		System.out.println("Receiving shares.");
+			 		System.out.println("Receiving shares from "+socket.getInetAddress());
 			 		ShamirShare secretShare = new ShamirShare();
 			 		secretShare.setFileName(input.readLine());
 			 		secretShare.setNoOfShares(Integer.parseInt((input.readLine())));
@@ -75,6 +75,7 @@ public class ServerThread extends Thread{
 			 		ArrayList<Share> tempArray = new ArrayList<Share>();
 			 		tempArray.add(tempShare);
 			 		secretShare.setShareArr(tempArray);
+			 		
 			 		output.println("Acknowledged");
 			 		localFileSlice(secretShare);
 			 	}

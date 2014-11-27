@@ -9,7 +9,7 @@ public class Server {
 			 System.out.println("Server started.");
 	            while (true) {
 	                new ServerThread(serverSocket.accept()).start();
-	                
+	                System.out.println("Client connected.");
 	            }
 	        } catch (IOException e) {
 	            System.err.println("Could not listen on port " + 4444);
