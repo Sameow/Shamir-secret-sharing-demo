@@ -33,10 +33,9 @@ public class ServerThread extends Thread{
 	
 	public ServerThread(Socket socket) {
 		this.socket=socket;
-		try (
+		try {
 		PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
 		BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		) {
 			output = pw;
 			input = br;
 		} 
@@ -80,12 +79,14 @@ public class ServerThread extends Thread{
 			 		secretShare.setShareArr(tempArray);
 			 		output.println("Acknowledged");
 			 		localFileSlice(secretShare);
+			 		socket.close();
 			 	}
 			 	if (inputLine.equals("Give me slice.")){
 			 		System.out.println("Sending file slice.");
 			 		ShamirShare local = getLocalSlice();
 			 		output.println(""+local.getShareArr().get(0).getShareIndex());
 			 		output.println(new String(local.getShareArr().get(0).getShare().toByteArray()));
+			 		socket.close();
 			 	}
 			 }
 		} catch (NumberFormatException e) {
@@ -98,7 +99,6 @@ public class ServerThread extends Thread{
 	}
 	private ShamirShare getAllFileSlice() throws IOException {
 		ShamirShare local = getLocalSlice();
-		
 		ArrayList<InetAddress> serverIPs = null;
 		try {
 			serverIPs = getOtherServerIP();
@@ -109,18 +109,16 @@ public class ServerThread extends Thread{
 		}
 		ArrayList<ServerToServerThread> ServerToServerThreads = new ArrayList<ServerToServerThread>();
 		for (int i=0; i<serverIPs.size(); i++){
-			try (
 			Socket socket = new Socket(serverIPs.get(i), 4444);
-					) {
 			ServerToServerThread askForSlice = new ServerToServerThread(socket);
 			askForSlice.start();
 			ServerToServerThreads.add(askForSlice);
-			}
 		}
 		
 		for (int i=0; i<ServerToServerThreads.size(); i++){
 			Share anotherShare = ServerToServerThreads.get(i).getShare();
 			local.getShareArr().add(anotherShare);
+			ServerToServerThreads.get(i).getSocket().close();
 		}
 		return local;	
 	}
@@ -158,6 +156,7 @@ public class ServerThread extends Thread{
 	    sendSharesToOthers(shamir);
 	    output.println("File splitting done.");
  		receivedFile.delete();
+ 		clientSocket.close();
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
@@ -192,13 +191,10 @@ public class ServerThread extends Thread{
 		}
 		ArrayList<SendingThread> sendingThreads = new ArrayList<SendingThread>();
 		 for (int i=0; i<otherServerIP.size(); i++) {
-			 try (
 			 Socket socket = new Socket(otherServerIP.get(i), 4444);
-					 ) {
 			 SendingThread serverthread = new SendingThread(socket, shamir, i);
 			 serverthread.start();
 			 sendingThreads.add(serverthread);
-			 }
 		 }
 		 try {
 			    Thread.sleep(5000);                 //1000 milliseconds is one second.
@@ -209,6 +205,7 @@ public class ServerThread extends Thread{
 			 if (sendingThreads.get(i).isSent()){
 				 System.out.println("File splitting done.");
 				 output.println("File splitting done.");
+				 sendingThreads.get(i).getSocket().close();
 				 break;
 			 }
 		 }

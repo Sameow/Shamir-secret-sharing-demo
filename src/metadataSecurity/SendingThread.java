@@ -19,7 +19,16 @@ public class SendingThread extends Thread {
 	private ShamirShare shamir;
 	private int shareIndex;
 	private boolean sent;
+	private Socket socket;
 	
+	public Socket getSocket() {
+		return socket;
+	}
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
+	}
+
 	public boolean isSent() {
 		return sent;
 	}
@@ -31,10 +40,10 @@ public class SendingThread extends Thread {
 	public SendingThread(Socket socket, ShamirShare shamir, int i) {
 		this.shamir=shamir;
 		this.shareIndex=i;
-		try (
+		this.setSocket(socket);
+		try {
 		PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
 		BufferedReader br = new BufferedReader( new InputStreamReader(socket.getInputStream()));
-		) {
 			output = pw;
 			input = br;
 		} catch (UnknownHostException e) {
@@ -61,6 +70,8 @@ public class SendingThread extends Thread {
 				 	if (inputLine.equals("Acknowledged.")){
 				 		System.out.println("Sent to servers.");
 				 		this.setSent(true);
+				 		this.output.close();
+				 		this.input.close();
 				 		break;
 				 	}
 				 	

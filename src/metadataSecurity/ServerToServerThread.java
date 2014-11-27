@@ -14,7 +14,15 @@ import main.Share;
 public class ServerToServerThread extends Thread {
 	private Socket socket = null;
 	private Share share;
-	 public Share getShare() {
+	 public Socket getSocket() {
+		return socket;
+	}
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
+	}
+
+	public Share getShare() {
 		return share;
 	}
 

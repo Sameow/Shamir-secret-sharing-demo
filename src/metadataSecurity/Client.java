@@ -67,13 +67,10 @@ public class Client {
 	            		this.clientThread.getSocket().getInetAddress());
 	            System.exit(1);
 	        } 
-		 try (
-				 PrintWriter pw = new PrintWriter(this.clientThread.getSocket().getOutputStream(), true);
-				 BufferedReader br = new BufferedReader(new InputStreamReader(this.clientThread.getSocket().getInputStream()));
-				 ) {
+			 PrintWriter pw = new PrintWriter(this.clientThread.getSocket().getOutputStream(), true);
+			 BufferedReader br = new BufferedReader(new InputStreamReader(this.clientThread.getSocket().getInputStream()));
 			this.output = pw;
 			this.input = br;
-		 }
 				 
 	 }
 
