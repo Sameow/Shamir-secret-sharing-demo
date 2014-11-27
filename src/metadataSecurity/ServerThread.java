@@ -33,10 +33,12 @@ public class ServerThread extends Thread{
 	
 	public ServerThread(Socket socket) {
 		this.socket=socket;
-		try {
-			output = new PrintWriter(socket.getOutputStream(), true);
-			input = new BufferedReader(
-		            new InputStreamReader(socket.getInputStream()));
+		try (
+		PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
+		BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		) {
+			output = pw;
+			input = br;
 		} 
 	 	catch (UnknownHostException e) {
             System.err.println("Don't know about host " + socket.getInetAddress());
@@ -52,6 +54,7 @@ public class ServerThread extends Thread{
          try {
 			while ((inputLine = input.readLine()) != null) {
 			 	if (inputLine.equals("Combine file.")){
+			 		System.out.println("Combining file.");
 			 		ShamirShare fileShares = getAllFileSlice();
 			 		ShamirShare toCombine = new ShamirShare();
 			 		toCombine.combine(fileShares);
@@ -75,11 +78,11 @@ public class ServerThread extends Thread{
 			 		ArrayList<Share> tempArray = new ArrayList<Share>();
 			 		tempArray.add(tempShare);
 			 		secretShare.setShareArr(tempArray);
-			 		
 			 		output.println("Acknowledged");
 			 		localFileSlice(secretShare);
 			 	}
 			 	if (inputLine.equals("Give me slice.")){
+			 		System.out.println("Sending file slice.");
 			 		ShamirShare local = getLocalSlice();
 			 		output.println(""+local.getShareArr().get(0).getShareIndex());
 			 		output.println(new String(local.getShareArr().get(0).getShare().toByteArray()));
@@ -106,9 +109,13 @@ public class ServerThread extends Thread{
 		}
 		ArrayList<ServerToServerThread> ServerToServerThreads = new ArrayList<ServerToServerThread>();
 		for (int i=0; i<serverIPs.size(); i++){
-			ServerToServerThread askForSlice = new ServerToServerThread(new Socket(serverIPs.get(i), 4444));
+			try (
+			Socket socket = new Socket(serverIPs.get(i), 4444);
+					) {
+			ServerToServerThread askForSlice = new ServerToServerThread(socket);
 			askForSlice.start();
 			ServerToServerThreads.add(askForSlice);
+			}
 		}
 		
 		for (int i=0; i<ServerToServerThreads.size(); i++){
@@ -120,27 +127,30 @@ public class ServerThread extends Thread{
 	
 	private ShamirShare getLocalSlice() throws IOException {
 		File localSlice = new File("fileSlice.txt");
+		ShamirShare local = new ShamirShare();
+		try (
 		FileReader fileReader = new FileReader(localSlice);
 		BufferedReader br = new BufferedReader(fileReader);
-		ShamirShare local = new ShamirShare();
+				) {
 		local.setFileName(br.readLine());
 		local.setNoOfShares(Integer.parseInt(br.readLine()));
 		local.setPrime(new BigInteger(br.readLine().getBytes()));
  		local.setThreshold(Integer.parseInt((br.readLine())));
  		local.getShareArr().get(0).setShare(new BigInteger(br.readLine().getBytes()));
  		local.getShareArr().get(0).setShareIndex(Integer.parseInt((br.readLine())));
-		fileReader.close();
+		}
 		return local;
 	}
 	private void splitFile(String fileName, int fileSize, Socket clientSocket) throws IOException{
 		File receivedFile = new File(fileName);
+		try (
 		FileOutputStream fos = new FileOutputStream(receivedFile,true);
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
+				) {
 		byte[] mybytearray = new byte[fileSize];
         int bytesRead = clientSocket.getInputStream().read(mybytearray, 0, mybytearray.length);
         bos.write(mybytearray, 0, bytesRead);
-	    bos.close();
-	    fos.close();
+		}
 	  
 	    ShamirShare shamir = new ShamirShare();
 	    shamir.split(receivedFile);
@@ -152,9 +162,10 @@ public class ServerThread extends Thread{
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
 		File file = new File("fileSlice.txt");
+		try (
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
-		
+		) {
 		bw.write(shamir.getFileName());
 		bw.newLine();
 		bw.write(""+shamir.getNoOfShares());
@@ -167,7 +178,7 @@ public class ServerThread extends Thread{
 		bw.newLine();
 		bw.write(""+shamir.getShareArr().get(0).getShareIndex());
 		bw.newLine();
-		bw.close();
+		}
 		shamir.getShareArr().remove(0);
         System.out.println("File share written.");
 	}
@@ -181,9 +192,13 @@ public class ServerThread extends Thread{
 		}
 		ArrayList<SendingThread> sendingThreads = new ArrayList<SendingThread>();
 		 for (int i=0; i<otherServerIP.size(); i++) {
-		 SendingThread serverthread = new SendingThread(new Socket(otherServerIP.get(i), 4444), shamir, i);
-		 serverthread.start();
-		 sendingThreads.add(serverthread);
+			 try (
+			 Socket socket = new Socket(otherServerIP.get(i), 4444);
+					 ) {
+			 SendingThread serverthread = new SendingThread(socket, shamir, i);
+			 serverthread.start();
+			 sendingThreads.add(serverthread);
+			 }
 		 }
 		 try {
 			    Thread.sleep(5000);                 //1000 milliseconds is one second.

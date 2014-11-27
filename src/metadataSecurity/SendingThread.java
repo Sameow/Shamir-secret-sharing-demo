@@ -31,12 +31,13 @@ public class SendingThread extends Thread {
 	public SendingThread(Socket socket, ShamirShare shamir, int i) {
 		this.shamir=shamir;
 		this.shareIndex=i;
-		try {
-			output = new PrintWriter(socket.getOutputStream(), true);
-			input = new BufferedReader(
-		            new InputStreamReader(socket.getInputStream()));
-		} 
-	 	catch (UnknownHostException e) {
+		try (
+		PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
+		BufferedReader br = new BufferedReader( new InputStreamReader(socket.getInputStream()));
+		) {
+			output = pw;
+			input = br;
+		} catch (UnknownHostException e) {
             System.err.println("Don't know about host " + socket.getInetAddress());
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " +

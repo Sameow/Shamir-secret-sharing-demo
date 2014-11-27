@@ -35,10 +35,12 @@ public class Client {
 		 try {
 				ArrayList<InetAddress> serverIP = getServerIP();
 				ArrayList<ClientThread> ClientThreads = new ArrayList<ClientThread>();
+				
 				for (int i=0; i<serverIP.size(); i++){
-					ClientThread lookForActiveServers = new ClientThread(new Socket(serverIP.get(i), 4444));
-					lookForActiveServers.start();
-					ClientThreads.add(lookForActiveServers);
+						Socket socket = new Socket(serverIP.get(i), 4444);
+						ClientThread lookForActiveServers = new ClientThread(socket);
+						lookForActiveServers.start();
+						ClientThreads.add(lookForActiveServers);
 				}
 				
 				try {
@@ -65,8 +67,14 @@ public class Client {
 	            		this.clientThread.getSocket().getInetAddress());
 	            System.exit(1);
 	        } 
-			this.output = new PrintWriter(this.clientThread.getSocket().getOutputStream(), true);
-			this.input = new BufferedReader(new InputStreamReader(this.clientThread.getSocket().getInputStream()));
+		 try (
+				 PrintWriter pw = new PrintWriter(this.clientThread.getSocket().getOutputStream(), true);
+				 BufferedReader br = new BufferedReader(new InputStreamReader(this.clientThread.getSocket().getInputStream()));
+				 ) {
+			this.output = pw;
+			this.input = br;
+		 }
+				 
 	 }
 
 	private ArrayList<InetAddress> getServerIP() {
@@ -102,13 +110,17 @@ public class Client {
 		output.println(file.getName());
 		output.println(file.length());
 		byte[] fileByte = new byte[(int) file.length()];
+		try (
 		FileInputStream userInput = new FileInputStream(file);
+				) {
 		userInput.read(fileByte);
+		}
+		System.out.print("Reading from file: ");
 		for (int i=0; i<fileByte.length; i++){
 			System.out.print((char)fileByte[i]);
-		}
+			}
+		
         this.socket.getOutputStream().write(fileByte);
-        userInput.close();
              
         String serverResult;
         while ((serverResult = input.readLine()) != null) {
@@ -124,15 +136,15 @@ public class Client {
 	public void getFile() throws IOException {
 		output.println("Combine file.");
 		File combinedFile = new File(input.readLine());
+		try (
 		FileOutputStream fos = new FileOutputStream(combinedFile,true);
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
+				) {
 		byte[] mybytearray = new byte[Integer.parseInt(input.readLine())];
         InputStream is = this.clientThread.getSocket().getInputStream();
         int bytesRead = is.read(mybytearray, 0, mybytearray.length);
         bos.write(mybytearray, 0, bytesRead);
-	    fos.flush();
-	    bos.close();
-	    fos.close();  
+				}
 	    this.setFileCombined(true);
         }
 	
