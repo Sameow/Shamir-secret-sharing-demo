@@ -57,12 +57,14 @@ public class ServerThread extends Thread{
 			 		ShamirShare fileShares = getAllFileSlice();
 			 		ShamirShare toCombine = new ShamirShare();
 			 		toCombine.combine(fileShares);
+			 		break;
 			 	}
 			 	if (inputLine.equals("Split file.")){
 			 		System.out.println("Splitting file.");
 			 		String fileName = input.readLine();
 			 		int fileSize = Integer.parseInt(input.readLine());
 			 		splitFile(fileName, fileSize, socket);
+			 		break;
 			 	}	
 			 	if (inputLine.equals("Sending shares.")){ 
 			 		System.out.println("Receiving shares from "+socket.getInetAddress());
@@ -79,14 +81,14 @@ public class ServerThread extends Thread{
 			 		secretShare.setShareArr(tempArray);
 			 		output.println("Acknowledged");
 			 		localFileSlice(secretShare);
-			 		socket.close();
+			 		break;
 			 	}
 			 	if (inputLine.equals("Give me slice.")){
 			 		System.out.println("Sending file slice.");
 			 		ShamirShare local = getLocalSlice();
 			 		output.println(""+local.getShareArr().get(0).getShareIndex());
 			 		output.println(new String(local.getShareArr().get(0).getShare().toByteArray()));
-			 		socket.close();
+			 		break;
 			 	}
 			 }
 		} catch (NumberFormatException e) {
@@ -156,7 +158,6 @@ public class ServerThread extends Thread{
 	    sendSharesToOthers(shamir);
 	    output.println("File splitting done.");
  		receivedFile.delete();
- 		clientSocket.close();
 	}
 	
 	private void localFileSlice(ShamirShare shamir) throws IOException {
