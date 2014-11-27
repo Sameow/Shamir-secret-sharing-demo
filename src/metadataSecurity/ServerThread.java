@@ -239,12 +239,13 @@ public class ServerThread extends Thread{
 		}
 		System.out.println("Local IP = "+localIP);
 		for (int i=0; i<serverIPs.size(); i++){
-			System.out.println("IP to be checked = "+serverIPs.get(i));
 			if (serverIPs.get(i).equals(localIP)){
 				serverIPs.remove(i);
 			}
 		}
-		System.out.println("Sending to "+serverIPs.size()+" servers");
+		for (int i=0; i<serverIPs.size(); i++){
+		System.out.println("Sending to "+serverIPs.get(i));
+		}
 		return serverIPs;	
 	}
 		
