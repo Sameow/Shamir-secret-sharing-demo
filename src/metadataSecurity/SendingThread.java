@@ -81,26 +81,4 @@ public class SendingThread extends Thread {
 			}
 	}
 
-	private String getIP() {
-		InetAddress localIP = null;
-		Enumeration e = null;
-		try {
-			e = NetworkInterface.getNetworkInterfaces();
-		} catch (SocketException e1) {
-			System.err.println("Cannot get IP address.");
-			e1.printStackTrace();
-		}
-		while(e.hasMoreElements()) {
-			NetworkInterface n = (NetworkInterface) e.nextElement();
-			Enumeration ee = n.getInetAddresses();
-			while (ee.hasMoreElements()) {
-				InetAddress i = (InetAddress) ee.nextElement();
-				if(i.isSiteLocalAddress()) {
-					localIP=i;
-				}
-			}
-		}
-		String localIPInString = localIP.getHostAddress() ;
-		return localIPInString;
-	}
 }
