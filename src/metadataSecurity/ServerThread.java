@@ -52,6 +52,7 @@ public class ServerThread extends Thread{
 		String inputLine;
          try {
 			while ((inputLine = input.readLine()) != null) {
+				System.out.println("inputLine = "+inputLine);
 			 	if (inputLine.equals("Combine file.")){
 			 		System.out.println("Combining file.");
 			 		ShamirShare fileShares = getAllFileSlice();
