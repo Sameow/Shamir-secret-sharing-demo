@@ -70,8 +70,7 @@ public class SendingThread extends Thread {
 				 	if (inputLine.equals("Acknowledged.")){
 				 		System.out.println("Sent to servers.");
 				 		this.setSent(true);
-				 		this.output.close();
-				 		this.input.close();
+				 		this.socket.close();
 				 		break;
 				 	}
 				 	
