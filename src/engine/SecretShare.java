@@ -71,9 +71,7 @@ public class SecretShare
     		
     		//mod = new BigInteger(modLength, certainty, random);
     		mod = BigInteger.probablePrime(modLength,random);
-    		
     	}
-    	
     	return mod;
     }
 

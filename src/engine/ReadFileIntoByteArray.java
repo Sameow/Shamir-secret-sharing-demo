@@ -79,6 +79,7 @@ public class ReadFileIntoByteArray {
   * @param file File this method should read
   * @return byte[] Returns a byte[] array of the contents of the file
   */
+ 
  public static byte[] getBytesFromFile(File file) throws IOException {
 	 
 	 FileInputStream fileInputStream=null;
@@ -99,6 +100,7 @@ public class ReadFileIntoByteArray {
 	 * @return
 	 * @throws IOException
 	 */
+ 
 	public static void byteArrayToFile(byte[] byteArray, String fileName) throws IOException {
 		
 		FileOutputStream fileOuputStream = new FileOutputStream(fileName); 
@@ -107,8 +109,7 @@ public class ReadFileIntoByteArray {
 		}
 	    
 	    fileOuputStream.close();
-	
-	    
+	   
 //		String content = new String(byteArray, "UTF-8");
 //		System.out.println(content);
 //		File file = new File(fileName);

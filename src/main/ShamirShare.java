@@ -64,14 +64,28 @@ public class ShamirShare {
 		this.setFileName(file.getName());
 		ArrayList<Share> shareList = new ArrayList<Share>();
 		String secret = null;
-		try {
-			secret=new String(ReadFileIntoByteArray.getBytesFromFile(file));
-			
-			System.out.println("Secret = "+secret);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+//		try {
+//			
+//			//TODO: check length of file and split file and shamir it. 
+//			//also think of how to send to server (format)
+//			int filelen = (int) file.length(); //get length
+//			if(filelen>1000){
+//				int secretlen = 1000;
+//				secret= new String(ReadFileIntoByteArray.getBytesFromFile(file));
+//				for(int i = 1000 ; i<filelen/1000;i++){
+//					String[] arguments ={"-k", Integer.toString(threshold), "-n", Integer.toString(noOfShares), "-sS", secret , "-primeCustom"};
+//					MainSplit.split(arguments);
+//					secretlen+= +1000;
+//				}
+//			}else
+//			secret= new String(ReadFileIntoByteArray.getBytesFromFile(file));
+//			
+//			System.out.println("Secret = "+secret);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
+		//main argument (to split)
 		String[] arguments ={"-k", Integer.toString(threshold), "-n", Integer.toString(noOfShares), "-sS", secret , "-primeCustom"};
 		SplitOutput output = MainSplit.split(arguments);
         List<ShareInfo> tempList = output.retrieveShares();
