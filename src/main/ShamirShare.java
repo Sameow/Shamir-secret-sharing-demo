@@ -64,6 +64,13 @@ public class ShamirShare {
 		this.setFileName(file.getName());
 		ArrayList<Share> shareList = new ArrayList<Share>();
 		String secret = null;
+		try {
+						secret=new String(ReadFileIntoByteArray.getBytesFromFile(file));
+						
+						System.out.println("Secret = "+secret);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 //		try {
 //			
 //			//TODO: check length of file and split file and shamir it. 
