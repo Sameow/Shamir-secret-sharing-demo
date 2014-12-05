@@ -64,6 +64,7 @@ public class ServerThread extends Thread{
 			 		String fileName = input.readLine();
 			 		int fileSize = Integer.parseInt(input.readLine());
 			 		splitFile(fileName, fileSize, socket);
+			 		output.println("File splitting done.");
 			 		break;
 			 	}	
 			 	if (inputLine.equals("Sending shares.")){ 
@@ -204,7 +205,6 @@ public class ServerThread extends Thread{
 		 for (int i=0; i<sendingThreads.size(); i++){
 			 if (sendingThreads.get(i).isSent()){
 				 System.out.println("File splitting done.");
-				 this.output.println("File splitting done.");
 				 sendingThreads.get(i).getSocket().close();
 				 break;
 			 }
