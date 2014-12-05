@@ -156,7 +156,6 @@ public class ServerThread extends Thread{
 	    shamir.split(receivedFile);
 	    localFileSlice(shamir);
 	    sendSharesToOthers(shamir);
-	    output.println("File splitting done.");
  		receivedFile.delete();
 	}
 	
@@ -205,7 +204,7 @@ public class ServerThread extends Thread{
 		 for (int i=0; i<sendingThreads.size(); i++){
 			 if (sendingThreads.get(i).isSent()){
 				 System.out.println("File splitting done.");
-				 output.println("File splitting done.");
+				 this.output.println("File splitting done.");
 				 sendingThreads.get(i).getSocket().close();
 				 break;
 			 }
